@@ -1,4 +1,7 @@
 import * as d3 from "d3";
+import { useEffect, useState } from "react";
+import dataSrc from "./spotify_decades.csv";
+
 export class CsvRow {
   name: string = "";
   artist: string = "";
@@ -31,4 +34,22 @@ export class CsvRow {
   constructor(rawRow: d3.DSVRowString) {
     for (const i in rawRow) this[i] = rawRow[i] ?? "";
   }
+}
+
+export function useCsvData() {
+  const [dataBytes, setDataBytes] = useState(
+    sessionStorage.getItem("dataBytes")
+  );
+  useEffect(() => {
+    if ((dataBytes?.length ?? 0) > 0) return;
+    fetch(dataSrc)
+      .then((resp) => resp.text())
+      .then((data) => {
+        if (data) {
+          setDataBytes(data);
+          sessionStorage.setItem("dataBytes", data);
+        }
+      });
+  });
+  return dataBytes;
 }

@@ -1,10 +1,16 @@
-import { MainVis } from "./MainVis";
+import { Container } from "@mui/material";
+import { lazy, Suspense } from "react";
+
+const FeaturesByGenreVis = lazy(() => import("./FeaturesByGenreVis"));
 
 function App() {
   return (
-    <div>
-      <MainVis />
-    </div>
+    <Suspense fallback={"Loading..."}>
+      <Container>
+        <h1 style={{ textAlign: "center" }}>Audio Features</h1>
+        <FeaturesByGenreVis />
+      </Container>
+    </Suspense>
   );
 }
 
