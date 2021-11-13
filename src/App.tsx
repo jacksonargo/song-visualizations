@@ -2,10 +2,11 @@ import { Box, Container, Grid } from "@mui/material";
 import React, { lazy, Suspense, useState } from "react";
 import { useCsvData } from "./CsvRow";
 import { Dataset } from "./Dataset";
+import { GenreToggleMap } from "./GenreToggles";
 import { SelectGenre } from "./SelectGenre";
 
-const FeaturesByGenreVis = lazy(() => import("./FeaturesByGenreVis"));
-const TopArtistsForTheDecadeVis = lazy(
+const AudioFeaturesByGenreVis = lazy(() => import("./FeaturesByGenreVis"));
+const CountTopArtistsByDecadeVis = lazy(
   () => import("./TopArtistsForTheDecadeVis")
 );
 
@@ -13,7 +14,7 @@ const loadingMessage = <p>Loading...</p>;
 
 function App() {
   const dataBytes = useCsvData();
-  const [genreToggles, setGenreToggles] = useState(new Map<string, boolean>());
+  const [genreToggles, setGenreToggles] = useState(new GenreToggleMap());
 
   if (!dataBytes) return loadingMessage;
   const dataset = Dataset.fromBlob(dataBytes);
@@ -38,8 +39,25 @@ function App() {
             />
           </Grid>
           <Grid item xs={10}>
-            <FeaturesByGenreVis dataset={dataset} genreToggles={genreToggles} />
-            <TopArtistsForTheDecadeVis genreToggles={genreToggles} />
+            <h2>Variation in Features</h2>
+            <AudioFeaturesByGenreVis
+              dataset={dataset}
+              genreToggles={genreToggles}
+              height={300}
+              width={800}
+              yearStart={0}
+              yearEnd={2022}
+            />
+            <h2>Count of Top Artists</h2>
+            <CountTopArtistsByDecadeVis
+              dataset={dataset}
+              genreToggles={genreToggles}
+              height={300}
+              width={800}
+              yearStart={0}
+              yearEnd={2022}
+              margin={{ left: 50, top: 50, right: 20, bottom: 20 }}
+            />
           </Grid>
         </Grid>
       </Container>

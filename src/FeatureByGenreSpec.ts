@@ -1,29 +1,18 @@
 import { VisualizationSpec } from "react-vega";
 import { GenreVisRow } from "./Dataset";
 
-export function FeaturesByGenreSpec(
-  title: string,
-  data: GenreVisRow[],
-  genres: string[],
-  yearStart: number,
-  yearEnd: number,
-  height: number = 300,
-  width: number = 800
-): VisualizationSpec {
+export function FeaturesByGenreSpec(props: {
+  data: GenreVisRow[];
+  height: number;
+  width: number;
+}): VisualizationSpec {
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
     mark: { type: "area" },
-    title: title,
-    width: width,
-    height: height,
+    width: props.width,
+    height: props.height,
     data: {
-      values: data
-        .filter((row) => {
-          if (genres.length === 0) return true;
-          return row.genres.filter((name) => genres?.includes(name)).length > 0;
-        })
-        .filter((r) => r.year >= yearStart)
-        .filter((r) => r.year <= yearEnd),
+      values: props.data,
     },
     encoding: {
       x: {

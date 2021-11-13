@@ -1,11 +1,11 @@
 import { Grid, TextField } from "@mui/material";
 import { uniq } from "lodash/fp";
 import { useState } from "react";
-import { GenreToggles } from "./GenreToggles";
+import { GenreToggleMap, GenreToggles } from "./GenreToggles";
 
 export function SelectGenre(props: {
-  genreToggles: Map<string, boolean>;
-  setGenreToggles: (val: Map<string, boolean>) => void;
+  genreToggles: GenreToggleMap;
+  setGenreToggles: (val: GenreToggleMap) => void;
   options: string[];
   selected: string[];
 }) {

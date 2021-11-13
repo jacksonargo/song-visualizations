@@ -1,35 +1,31 @@
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import * as d3 from "d3";
 import React, { RefObject, useEffect, useRef } from "react";
-import { CsvRow, useCsvData } from "./CsvRow";
-import { Dataset } from "./Dataset";
+import { Dataset, UniqueArtistsRollup } from "./Dataset";
+import { GenreToggleMap } from "./GenreToggles";
 
 function TopArtistsForTheDecadeVis(props: {
-  genreToggles: Map<string, boolean>;
+  dataset: Dataset;
+  genreToggles: GenreToggleMap;
+  yearStart: number;
+  yearEnd: number;
+  height: number;
+  width: number;
+  margin: { left: number; right: number; top: number; bottom: number };
 }) {
-  const dataBytes = useCsvData();
-  if (!dataBytes) return <p>Loading...</p>;
-  const dataset = Dataset.fromBlob(dataBytes);
+  const rollup = props.dataset
+    .toUniqueArtistsRollup(props)
+    .filter((r) => r.distinctArtists > 1);
 
-  const selectedGenres = Array.from(props.genreToggles.keys()).filter((name) =>
-    props.genreToggles.get(name)
-  );
-
-  const rollup = rollupData(dataset.rows)
-    .filter((r) => r.distinctArtists > 1)
-    .filter((r) => r.decade !== 2020);
   rollup.sort((a, b) => a.decade - b.decade);
-
-  //const filtered = rollup.filter((r) => sea);
 
   return (
     <Box>
-      <h2>Top Artists for the Decade</h2>
       <BarChart
         rollupData={rollup}
-        height={300}
-        width={800}
-        margin={{ left: 50, top: 50, right: 20, bottom: 20 }}
+        height={props.height}
+        width={props.width}
+        margin={props.margin}
       />
     </Box>
   );
@@ -69,7 +65,7 @@ function drawBarChart(props: {
   const x = d3
     .scaleBand([0, iWidth])
     .domain(
-      Array.from(new Array(7).keys())
+      Array.from(new Array(8).keys())
         .map((n) => 1950 + n * 10)
         .map((x) => x.toString())
     )
@@ -132,49 +128,6 @@ function drawBarChart(props: {
     .call(d3.axisBottom(x));
 
   return svg;
-}
-
-interface UniqueArtistsRollup {
-  decade: number;
-  artist: string;
-  count: number;
-  distinctArtists: number;
-}
-
-function rollupData(rawData: CsvRow[]): UniqueArtistsRollup[] {
-  const data = rawData
-    .map((r) => ({
-      artist: r.artist,
-      year: new Date(r.album_release_date).getFullYear(),
-    }))
-    .map((r) => ({
-      artist: r.artist,
-      decade: r.year - (r.year % 10),
-    }));
-
-  const grouping = d3.group(
-    data,
-    (r) => r.decade,
-    (r) => r.artist
-  );
-
-  return Array.from(grouping).flatMap(([decade, decadeGrouping]) => {
-    const rollup = Array.from(decadeGrouping).map(
-      ([artist, artistGrouping]) => ({
-        decade: decade,
-        artist: artist,
-        count: artistGrouping.length,
-        distinctArtists: 1,
-      })
-    );
-    rollup.push({
-      decade: decade,
-      artist: "",
-      count: rollup.reduce((sum, g) => sum + g.count, 0),
-      distinctArtists: rollup.length,
-    });
-    return rollup;
-  });
 }
 
 export default TopArtistsForTheDecadeVis;
