@@ -8,9 +8,11 @@ export interface FeaturesByGenreVisProps extends DataFilterProps {
   height: number;
   width: number;
   dataset: Dataset;
+  show: boolean;
 }
 
 export function FeaturesByGenreVis(props: FeaturesByGenreVisProps) {
+  if (!props.show) return <Box />;
   const filter = new DataFilter(props);
   return (
     <Box>

@@ -7,6 +7,7 @@ import { GenreToggleMap } from "./GenreToggles";
 
 function TopArtistsPerDecadeBarsVis(props: {
   dataset: Dataset;
+  show: boolean;
   genreToggles: GenreToggleMap;
   yearStart?: number;
   yearEnd?: number;
@@ -14,6 +15,8 @@ function TopArtistsPerDecadeBarsVis(props: {
   width: number;
   margin: { left: number; right: number; top: number; bottom: number };
 }) {
+  if (!props.show) return <Box />;
+
   const rollup = props.dataset
     .toUniqueArtistsRollup({ ...props, ...new DataFilter(props) })
     .filter((r) => r.distinctArtists > 1);

@@ -12,9 +12,12 @@ export interface TopArtistsByDecadeVisProps extends DataFilterProps {
   height: number;
   width: number;
   topN: number;
+  show: boolean;
 }
 
 export function TopArtistsByDecadeVis(props: TopArtistsByDecadeVisProps) {
+  if (!props.show) return <Box />;
+
   const rollup = props.dataset
     .toUniqueArtistsRollup(new DataFilter(props))
     .filter((r) => r.artist !== "");
