@@ -1,30 +1,37 @@
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import * as d3 from "d3";
 import React, { RefObject, useEffect, useRef } from "react";
 import { CsvRow, useCsvData } from "./CsvRow";
 import { Dataset } from "./Dataset";
 
-function TopArtistsForTheDecadeVis() {
+function TopArtistsForTheDecadeVis(props: {
+  genreToggles: Map<string, boolean>;
+}) {
   const dataBytes = useCsvData();
-
   if (!dataBytes) return <p>Loading...</p>;
   const dataset = Dataset.fromBlob(dataBytes);
+
+  const selectedGenres = Array.from(props.genreToggles.keys()).filter((name) =>
+    props.genreToggles.get(name)
+  );
+
   const rollup = rollupData(dataset.rows)
     .filter((r) => r.distinctArtists > 1)
     .filter((r) => r.decade !== 2020);
   rollup.sort((a, b) => a.decade - b.decade);
 
+  //const filtered = rollup.filter((r) => sea);
+
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <BarChart
-          rollupData={rollup}
-          height={300}
-          width={800}
-          margin={{ left: 50, top: 50, right: 20, bottom: 20 }}
-        />
-      </Grid>
-    </Grid>
+    <Box>
+      <h2>Top Artists for the Decade</h2>
+      <BarChart
+        rollupData={rollup}
+        height={300}
+        width={800}
+        margin={{ left: 50, top: 50, right: 20, bottom: 20 }}
+      />
+    </Box>
   );
 }
 
