@@ -23,9 +23,16 @@ export interface UniqueArtistsRollup {
 
 export interface GenreVisRow {
   year: number;
+  decade: number;
   feature_name: string;
   value: number;
   genres: string[];
+}
+
+export interface FilterProps {
+  genreToggles: GenreToggleMap;
+  yearStart?: number;
+  yearEnd?: number;
 }
 
 export class Dataset {
@@ -118,9 +125,9 @@ export class Dataset {
           isEmpty(selected) || intersection(selected, r.genres()).length > 0
       )
       .flatMap((r) => {
-        const year = r.album_release_date.slice(0, 4);
         return audioFeatures.map<GenreVisRow>((feature_name) => ({
-          year: Number(year),
+          year: r.year(),
+          decade: r.decade(),
           feature_name: feature_name,
           value: r[feature_name] ? Number(r[feature_name]) : 0,
           genres: r.genres(),

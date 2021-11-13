@@ -1,20 +1,21 @@
 import { Box } from "@mui/material";
 import * as d3 from "d3";
 import React, { RefObject, useEffect, useRef } from "react";
+import { DataFilter } from "./DataFilter";
 import { Dataset, UniqueArtistsRollup } from "./Dataset";
 import { GenreToggleMap } from "./GenreToggles";
 
-function TopArtistsForTheDecadeVis(props: {
+function TopArtistsPerDecadeBarsVis(props: {
   dataset: Dataset;
   genreToggles: GenreToggleMap;
-  yearStart: number;
-  yearEnd: number;
+  yearStart?: number;
+  yearEnd?: number;
   height: number;
   width: number;
   margin: { left: number; right: number; top: number; bottom: number };
 }) {
   const rollup = props.dataset
-    .toUniqueArtistsRollup(props)
+    .toUniqueArtistsRollup({ ...props, ...new DataFilter(props) })
     .filter((r) => r.distinctArtists > 1);
 
   rollup.sort((a, b) => a.decade - b.decade);
@@ -130,4 +131,4 @@ function drawBarChart(props: {
   return svg;
 }
 
-export default TopArtistsForTheDecadeVis;
+export default TopArtistsPerDecadeBarsVis;

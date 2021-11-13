@@ -1,23 +1,24 @@
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { VegaLite } from "react-vega";
-import { Dataset, GenreVisRow } from "./Dataset";
+import { DataFilter, DataFilterProps } from "./DataFilter";
+import { Dataset } from "./Dataset";
 import { FeaturesByGenreSpec } from "./FeatureByGenreSpec";
-import { GenreToggleMap } from "./GenreToggles";
 
-export function FeaturesByGenreVis(props: {
-  genreToggles: GenreToggleMap;
-  yearStart: number;
-  yearEnd: number;
+export interface FeaturesByGenreVisProps extends DataFilterProps {
   height: number;
   width: number;
   dataset: Dataset;
-}) {
+}
+
+export function FeaturesByGenreVis(props: FeaturesByGenreVisProps) {
+  const filter = new DataFilter(props);
   return (
     <Box>
       <VegaLite
         spec={FeaturesByGenreSpec({
           ...props,
-          data: props.dataset.toGenreVisRow(props),
+          ...filter,
+          data: props.dataset.toGenreVisRow(filter),
         })}
       />
     </Box>
