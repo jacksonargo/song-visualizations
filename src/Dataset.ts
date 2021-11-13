@@ -40,7 +40,6 @@ export class Dataset {
       new Map<string, number>()
     );
 
-    console.log(this.genreCounts);
     this.genres = uniq(genres).sort((aName, bName) => {
       const aCount = this.genreCounts.get(aName) ?? 0;
       const bCount = this.genreCounts.get(bName) ?? 0;
