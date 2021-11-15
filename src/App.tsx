@@ -38,8 +38,9 @@ function App() {
     <Suspense fallback={loadingMessage}>
       <Container>
         <Grid container>
-          <Grid item xs={12}>
-            <h1 style={{ textAlign: "center" }}>Audio Features</h1>
+          <Grid item xs={12} style={{ textAlign: "center" }}>
+            <h1>Visualizing Audio Features over the Decades</h1>
+            <em>Created by Jackson Argo, Matt Kinley, and Erick Martinez.</em>
           </Grid>
           <Grid item xs={2}>
             <SelectGenre
