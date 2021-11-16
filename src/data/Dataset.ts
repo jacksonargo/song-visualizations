@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { intersection, isEmpty, uniq } from "lodash/fp";
 import { CsvRow } from "./CsvRow";
-import { GenreToggleMap } from "./GenreToggles";
+import { GenreToggleMap } from "../components/GenreToggles";
 
 const audioFeatures = [
   "danceability",
@@ -13,7 +13,7 @@ const audioFeatures = [
   "valence",
 ];
 
-export interface UniqueArtistsRollup {
+export interface ArtistsVisRow {
   decade: number;
   artist: string;
   count: number;
@@ -21,7 +21,7 @@ export interface UniqueArtistsRollup {
   genres: string[];
 }
 
-export interface GenreVisRow {
+export interface FeaturesRow {
   year: number;
   decade: number;
   feature_name: string;
@@ -61,11 +61,11 @@ export class Dataset {
     return new Dataset(d3.csvParse(blob).map((rawRow) => new CsvRow(rawRow)));
   }
 
-  toUniqueArtistsRollup(props: {
+  toArtistsVisRow(props: {
     yearStart: number;
     yearEnd: number;
     genreToggles: GenreToggleMap;
-  }): UniqueArtistsRollup[] {
+  }): ArtistsVisRow[] {
     const selected = props.genreToggles.selectedGenres();
     const data = this.rows
       .filter((r) => r.year() >= props.yearStart)
@@ -111,11 +111,11 @@ export class Dataset {
     });
   }
 
-  toGenreVisRow(props: {
+  toFeaturesVisRow(props: {
     yearStart: number;
     yearEnd: number;
     genreToggles: GenreToggleMap;
-  }): GenreVisRow[] {
+  }): FeaturesRow[] {
     const selected = props.genreToggles.selectedGenres();
     return this.rows
       .filter((r) => r.year() >= props.yearStart)
@@ -125,7 +125,7 @@ export class Dataset {
           isEmpty(selected) || intersection(selected, r.genres()).length > 0
       )
       .flatMap((r) => {
-        return audioFeatures.map<GenreVisRow>((feature_name) => ({
+        return audioFeatures.map<FeaturesRow>((feature_name) => ({
           year: r.year(),
           decade: r.decade(),
           feature_name: feature_name,

@@ -1,58 +1,9 @@
-import { Box } from "@mui/material";
 import * as d3 from "d3";
-import React, { RefObject, useEffect, useRef } from "react";
-import { DataFilter } from "./DataFilter";
-import { Dataset, UniqueArtistsRollup } from "./Dataset";
-import { GenreToggleMap } from "./GenreToggles";
+import { RefObject } from "react";
+import { ArtistsVisRow } from "../../data/Dataset";
 
-function TopArtistsPerDecadeBarsVis(props: {
-  dataset: Dataset;
-  show: boolean;
-  genreToggles: GenreToggleMap;
-  yearStart?: number;
-  yearEnd?: number;
-  height: number;
-  width: number;
-  margin: { left: number; right: number; top: number; bottom: number };
-}) {
-  if (!props.show) return <Box />;
-
-  const rollup = props.dataset
-    .toUniqueArtistsRollup({ ...props, ...new DataFilter(props) })
-    .filter((r) => r.distinctArtists > 1);
-
-  rollup.sort((a, b) => a.decade - b.decade);
-
-  return (
-    <Box>
-      <BarChart
-        rollupData={rollup}
-        height={props.height}
-        width={props.width}
-        margin={props.margin}
-      />
-    </Box>
-  );
-}
-
-function BarChart(props: {
-  rollupData: UniqueArtistsRollup[];
-  height: number;
-  width: number;
-  margin: { left: number; right: number; top: number; bottom: number };
-}) {
-  const visRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const svg = drawBarChart({ ref: visRef, ...props });
-    return () => {
-      svg.remove();
-    };
-  });
-  return <div ref={visRef} />;
-}
-
-function drawBarChart(props: {
-  rollupData: UniqueArtistsRollup[];
+export function SummaryBarChartSpec(props: {
+  rollupData: ArtistsVisRow[];
   ref: RefObject<HTMLDivElement>;
   height: number;
   width: number;
@@ -78,7 +29,7 @@ function drawBarChart(props: {
   const y = d3.scaleLinear([iHeight, 0]).domain([0, 210]);
 
   const line = d3
-    .line<UniqueArtistsRollup>()
+    .line<ArtistsVisRow>()
     .x((d) => (x(d[xAttr].toString()) ?? 0) + x.bandwidth() / 2)
     .y((d) => y(d.distinctArtists));
 
@@ -133,5 +84,3 @@ function drawBarChart(props: {
 
   return svg;
 }
-
-export default TopArtistsPerDecadeBarsVis;

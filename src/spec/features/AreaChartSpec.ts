@@ -1,9 +1,9 @@
-import { VisualizationSpec } from "react-vega";
-import { GenreVisRow } from "./Dataset";
 import { uniq } from "lodash/fp";
+import { VisualizationSpec } from "react-vega";
+import { FeaturesRow } from "../../data/Dataset";
 
-export function FeaturesByGenreSpec(props: {
-  data: GenreVisRow[];
+export function AreaChartSpec(props: {
+  data: FeaturesRow[];
   height: number;
   width: number;
   yearStart: number;
@@ -16,9 +16,7 @@ export function FeaturesByGenreSpec(props: {
     mark: { type: "area" },
     width: props.width,
     height: props.height,
-    data: {
-      values: props.data,
-    },
+    data: { values: props.data },
     encoding: {
       x: {
         field: "year",

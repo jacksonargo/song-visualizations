@@ -1,16 +1,16 @@
-import { GenreToggleMap } from "./GenreToggles";
+import { GenreToggleMap } from "../components/GenreToggles";
 
-export interface DataFilterProps {
+export interface FilterProps {
   genreToggles: GenreToggleMap;
   yearStart?: number;
   yearEnd?: number;
 }
 
-export class DataFilter {
+export class Filter {
   genreToggles: GenreToggleMap;
   yearStart: number;
   yearEnd: number;
-  constructor(props: DataFilterProps) {
+  constructor(props: FilterProps) {
     this.yearStart = props.yearStart ?? 1950;
     this.yearStart = this.yearStart > 1950 ? this.yearStart : 1950;
     this.yearEnd = props.yearStart ?? 2025;

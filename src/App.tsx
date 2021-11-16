@@ -1,18 +1,13 @@
 import { Container, Grid, Switch } from "@mui/material";
-import React, { lazy, Suspense, useState } from "react";
-import { useCsvData } from "./CsvRow";
-import { Dataset } from "./Dataset";
-import { GenreToggleMap } from "./GenreToggles";
-import { RadarChartVis } from "./RadarChartVis";
-import { SelectGenre } from "./SelectGenre";
-
-const AudioFeaturesByGenreVis = lazy(() => import("./FeaturesByGenreVis"));
-const TopArtistsForTheDecadeVis = lazy(
-  () => import("./TopArtistsPerDecadeBarsVis")
-);
-const TopArtistsByDecadeVis = lazy(
-  () => import("./TopArtistsByDecadeDonutSpec")
-);
+import React, { Suspense, useState } from "react";
+import { ArtistsByDecadeChart } from "./components/ArtistsByDecadeChart";
+import { ArtistsSummaryChart } from "./components/ArtistsSummaryChart";
+import { FeaturesAreaChart } from "./components/FeaturesAreaChart";
+import { FeaturesRadarChart } from "./components/FeaturesRadarChart";
+import { GenreToggleMap } from "./components/GenreToggles";
+import { useCsvData } from "./data/CsvRow";
+import { Dataset } from "./data/Dataset";
+import { SelectGenre } from "./components/SelectGenre";
 
 const loadingMessage = <p>Loading...</p>;
 
@@ -58,7 +53,7 @@ function App() {
                 setShowVariationAreaVis(e.target.checked);
               }}
             />
-            <AudioFeaturesByGenreVis
+            <FeaturesAreaChart
               show={showVariationAreaVis}
               dataset={dataset}
               genreToggles={genreToggles}
@@ -72,7 +67,7 @@ function App() {
                 setShowVariationsRadarVis(e.target.checked);
               }}
             />
-            <RadarChartVis
+            <FeaturesRadarChart
               show={showVariationsRadarVis}
               dataset={dataset}
               genreToggles={genreToggles}
@@ -87,7 +82,7 @@ function App() {
                 setShowTopArtistsOverallBar(e.target.checked);
               }}
             />
-            <TopArtistsForTheDecadeVis
+            <ArtistsSummaryChart
               show={showTopArtistsOverallBar}
               dataset={dataset}
               genreToggles={genreToggles}
@@ -102,7 +97,7 @@ function App() {
                 setShowTopArtistsByDecadeBars(e.target.checked);
               }}
             />
-            <TopArtistsByDecadeVis
+            <ArtistsByDecadeChart
               show={showTopArtistsByDecadeBar}
               dataset={dataset}
               genreToggles={genreToggles}

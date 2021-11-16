@@ -1,12 +1,15 @@
 import { Box, Grid } from "@mui/material";
 import * as d3 from "d3";
-import { VegaLite } from "react-vega";
-import { DataFilter, DataFilterProps } from "./DataFilter";
-import { Dataset } from "./Dataset";
-import { RadarChartData, RadarChartSpec } from "./RadarChartSpec";
 import { uniq } from "lodash/fp";
+import { VegaLite } from "react-vega";
+import { Filter, FilterProps } from "../data/Filter";
+import { Dataset } from "../data/Dataset";
+import {
+  RadarChartData,
+  RadarChartSpec,
+} from "../spec/features/RadarChartSpec";
 
-export interface RadarChartVisProps extends DataFilterProps {
+export interface RadarChartVisProps extends FilterProps {
   height: number;
   width: number;
   dataset: Dataset;
@@ -14,15 +17,17 @@ export interface RadarChartVisProps extends DataFilterProps {
   show: boolean;
 }
 
-export function RadarChartVis(props: RadarChartVisProps) {
+export function FeaturesRadarChart(props: RadarChartVisProps) {
   if (!props.show) return <Box />;
 
-  const filter = new DataFilter(props);
-  const data = props.dataset.toGenreVisRow(filter).map<RadarChartData>((r) => ({
-    key: r.feature_name,
-    category: r.decade,
-    value: r.value,
-  }));
+  const filter = new Filter(props);
+  const data = props.dataset
+    .toFeaturesVisRow(filter)
+    .map<RadarChartData>((r) => ({
+      key: r.feature_name,
+      category: r.decade,
+      value: r.value,
+    }));
 
   const rollup: RadarChartData[] = d3
     .flatGroup(

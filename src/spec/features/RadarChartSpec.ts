@@ -12,7 +12,6 @@ export function RadarChartSpec(props: {
   width: number;
   padding: number;
 }): VisualizationSpec {
-  // @ts-ignore
   return {
     $schema: "https://vega.github.io/schema/vega/v5.json",
     description:
