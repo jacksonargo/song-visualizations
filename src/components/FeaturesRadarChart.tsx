@@ -2,27 +2,27 @@ import { Box, Grid } from "@mui/material";
 import * as d3 from "d3";
 import { uniq } from "lodash/fp";
 import { VegaLite } from "react-vega";
-import { Filter, FilterProps } from "../data/Filter";
 import { Dataset } from "../data/Dataset";
+import { Filter } from "../data/Filter";
 import {
   RadarChartData,
   RadarChartSpec,
 } from "../spec/features/RadarChartSpec";
 
-export interface RadarChartVisProps extends FilterProps {
+export interface RadarChartVisProps {
   height: number;
   width: number;
   dataset: Dataset;
   padding: number;
   show: boolean;
+  filter: Filter;
 }
 
 export function FeaturesRadarChart(props: RadarChartVisProps) {
   if (!props.show) return <Box />;
 
-  const filter = new Filter(props);
   const data = props.dataset
-    .toFeaturesVisRow(filter)
+    .unpivotFeatures(props.filter)
     .map<RadarChartData>((r) => ({
       key: r.feature_name,
       category: r.decade,

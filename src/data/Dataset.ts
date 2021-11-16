@@ -1,9 +1,9 @@
 import * as d3 from "d3";
 import { intersection, isEmpty, uniq } from "lodash/fp";
 import { CsvRow } from "./CsvRow";
-import { GenreToggleMap } from "../components/GenreToggles";
+import { Filter } from "./Filter";
 
-const audioFeatures = [
+export const AudioFeatures = [
   "danceability",
   "energy",
   "speechiness",
@@ -27,12 +27,6 @@ export interface FeaturesRow {
   feature_name: string;
   value: number;
   genres: string[];
-}
-
-export interface FilterProps {
-  genreToggles: GenreToggleMap;
-  yearStart?: number;
-  yearEnd?: number;
 }
 
 export class Dataset {
@@ -61,26 +55,40 @@ export class Dataset {
     return new Dataset(d3.csvParse(blob).map((rawRow) => new CsvRow(rawRow)));
   }
 
-  toArtistsVisRow(props: {
-    yearStart: number;
-    yearEnd: number;
-    genreToggles: GenreToggleMap;
-  }): ArtistsVisRow[] {
-    const selected = props.genreToggles.selectedGenres();
-    const data = this.rows
-      .filter((r) => r.year() >= props.yearStart)
-      .filter((r) => r.year() <= props.yearEnd)
+  selectCSVRows(filter: Filter): CsvRow[] {
+    const selectedGenres = filter.genreToggles.selection();
+    return this.rows
+      .filter((r) => r.year() >= filter.yearStart)
+      .filter((r) => r.year() <= filter.yearEnd)
       .filter(
-        (r) =>
-          isEmpty(selected) || intersection(selected, r.genres()).length > 0
-      )
-      .filter((r) => r.decade() > 0)
-      .map((r) => ({
-        artist: r.artist,
+        (row) =>
+          isEmpty(selectedGenres) ||
+          intersection(selectedGenres, row.genres()).length > 0
+      );
+  }
+
+  unpivotFeatures(filter: Filter): FeaturesRow[] {
+    const selectedFeatures = filter.featureToggles.selection();
+    if (isEmpty(selectedFeatures)) selectedFeatures.push(...AudioFeatures);
+
+    return this.selectCSVRows(filter).flatMap((r) => {
+      return selectedFeatures.map<FeaturesRow>((feature_name) => ({
         year: r.year(),
         decade: r.decade(),
+        feature_name: feature_name,
+        value: r[feature_name] ? Number(r[feature_name]) : 0,
         genres: r.genres(),
       }));
+    });
+  }
+
+  toArtistsVisRow(filter: Filter): ArtistsVisRow[] {
+    const data = this.selectCSVRows(filter).map((r) => ({
+      artist: r.artist,
+      year: r.year(),
+      decade: r.decade(),
+      genres: r.genres(),
+    }));
 
     const grouping = d3.group(
       data,
@@ -106,32 +114,7 @@ export class Dataset {
         distinctArtists: rollup.length,
         genres: rollup.flatMap((r) => r.genres),
       });
-
       return rollup;
     });
-  }
-
-  toFeaturesVisRow(props: {
-    yearStart: number;
-    yearEnd: number;
-    genreToggles: GenreToggleMap;
-  }): FeaturesRow[] {
-    const selected = props.genreToggles.selectedGenres();
-    return this.rows
-      .filter((r) => r.year() >= props.yearStart)
-      .filter((r) => r.year() <= props.yearEnd)
-      .filter(
-        (r) =>
-          isEmpty(selected) || intersection(selected, r.genres()).length > 0
-      )
-      .flatMap((r) => {
-        return audioFeatures.map<FeaturesRow>((feature_name) => ({
-          year: r.year(),
-          decade: r.decade(),
-          feature_name: feature_name,
-          value: r[feature_name] ? Number(r[feature_name]) : 0,
-          genres: r.genres(),
-        }));
-      });
   }
 }

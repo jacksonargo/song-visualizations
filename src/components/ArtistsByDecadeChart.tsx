@@ -2,12 +2,12 @@ import { Box, Grid } from "@mui/material";
 import * as d3 from "d3";
 import { uniq } from "lodash/fp";
 import { VegaLite } from "react-vega";
-import { Filter, FilterProps } from "../data/Filter";
 import { ArtistsVisRow, Dataset } from "../data/Dataset";
+import { Filter } from "../data/Filter";
 import { SingleDecadeBarsSpec } from "../spec/artists/SingleDecadeBarsSpec";
 import { SingleDecadeDonutSpec } from "../spec/artists/SingleDecadeDonutSpec";
 
-export interface TopArtistsByDecadeVisProps extends FilterProps {
+export interface TopArtistsByDecadeVisProps {
   dataset: Dataset;
   innerRadius?: number;
   padAngle?: number;
@@ -15,13 +15,14 @@ export interface TopArtistsByDecadeVisProps extends FilterProps {
   width: number;
   topN: number;
   show: boolean;
+  filter: Filter;
 }
 
 export function ArtistsByDecadeChart(props: TopArtistsByDecadeVisProps) {
   if (!props.show) return <Box />;
 
   const rollup = props.dataset
-    .toArtistsVisRow(new Filter(props))
+    .toArtistsVisRow(props.filter)
     .filter((r) => r.artist !== "");
   const decadeGrouping = d3.group(rollup, (r) => r.decade);
 
