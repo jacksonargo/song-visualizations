@@ -49,7 +49,7 @@ export function ArtistsByDecadeChart(props: TopArtistsByDecadeVisProps) {
     const decadeTopArtists = sorted.slice(0, props.topN);
     const summaryTop = decadeTopArtists.reduce(
       summarize,
-      initSummary(decade, `Top ${props.topN}\nArtists`)
+      initSummary(decade, `Top ${props.topN}`)
     );
 
     const decodeOther = sorted.slice(props.topN, -1);
@@ -69,7 +69,9 @@ export function ArtistsByDecadeChart(props: TopArtistsByDecadeVisProps) {
       {decades.map((decade) => (
         <Grid key={decade} container>
           <Grid item xs={12}>
-            <h3>{decade}</h3>
+            <h3>
+              {decade} - {decade + 10}
+            </h3>
           </Grid>
           <Grid item md={6}>
             <h4>

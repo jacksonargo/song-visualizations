@@ -18,10 +18,16 @@ export function SingleDecadeBarsSpec(props: {
         type: "quantitative",
         axis: { title: "Number of Top Hits" },
       },
-      y: { field: "artist", type: "nominal" },
+      y: {
+        field: "artist",
+        type: "nominal",
+        axis: { title: "" },
+        sort: "-x",
+      },
       color: {
         field: "artist",
         type: "nominal",
+        sort: "-x",
       },
     },
   };

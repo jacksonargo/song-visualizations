@@ -1,5 +1,8 @@
 import { Toggles } from "../components/Toggles";
 
+const minYear = 1950;
+const maxYear = 2019;
+
 export interface FilterProps {
   genreToggles: Toggles;
   featureToggles: Toggles;
@@ -14,10 +17,10 @@ export class Filter {
   yearEnd: number;
 
   constructor(props: FilterProps) {
-    this.yearStart = props.yearStart ?? 1950;
-    this.yearStart = this.yearStart > 1950 ? this.yearStart : 1950;
-    this.yearEnd = props.yearStart ?? 2025;
-    this.yearEnd = this.yearEnd < 2025 ? this.yearEnd : 2025;
+    this.yearStart = props.yearStart ?? minYear;
+    this.yearStart = this.yearStart > minYear ? this.yearStart : minYear;
+    this.yearEnd = props.yearStart ?? maxYear;
+    this.yearEnd = this.yearEnd < maxYear ? this.yearEnd : maxYear;
     this.genreToggles = props.genreToggles;
     this.featureToggles = props.featureToggles;
   }
