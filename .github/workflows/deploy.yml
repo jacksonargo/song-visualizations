@@ -1,0 +1,12 @@
+name: deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: yarn install
+      - run: npm run deploy
