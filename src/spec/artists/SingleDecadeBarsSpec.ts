@@ -6,29 +6,43 @@ export function SingleDecadeBarsSpec(props: {
   height: number;
   width: number;
 }): VisualizationSpec {
+  const values = props.data.map((r) => ({ ...r, margin: 0.1 }));
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    mark: { type: "bar", tooltip: true },
-    data: { values: props.data },
+    data: { values: values },
     width: props.width,
     height: props.height,
     encoding: {
-      x: {
-        field: "count",
-        type: "quantitative",
-        axis: { title: "Number of Top Hits" },
-      },
       y: {
         field: "artist",
         type: "nominal",
-        axis: { title: "" },
-        sort: "-x",
-      },
-      color: {
-        field: "artist",
-        type: "nominal",
-        sort: "-x",
+        axis: { title: null, ticks: false, labels: false, grid: false },
+        sort: { field: "count", op: "sum", order: "descending" },
       },
     },
+    layer: [
+      {
+        mark: { type: "bar", tooltip: true },
+        encoding: {
+          x: {
+            field: "count",
+            type: "quantitative",
+            axis: { title: "Number of Top Hits" },
+          },
+          color: {
+            field: "artist",
+            type: "nominal",
+            legend: null,
+          },
+        },
+      },
+      {
+        mark: { type: "text", align: "left" },
+        encoding: {
+          x: { field: "margin", type: "quantitative" },
+          text: { type: "nominal", field: "artist" },
+        },
+      },
+    ],
   };
 }

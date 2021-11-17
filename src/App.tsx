@@ -73,13 +73,13 @@ function App() {
               height={300}
               width={800}
             />
-            <Box height={"100vh"}>
+            <Box height={"100vh"} maxWidth={"100%"}>
               <ArtistsSummaryChart
                 title={"Count of Top Artists"}
                 dataset={dataset}
                 filter={filter}
-                height={200}
-                width={800}
+                height={600}
+                width={1200}
                 margin={{ left: 20, top: 20, right: 20, bottom: 20 }}
               />
             </Box>

@@ -1,9 +1,8 @@
-import { Box, Grid, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { uniq } from "lodash/fp";
 import { VegaLite } from "react-vega";
 import { ArtistsVisRow, Dataset } from "../data/Dataset";
 import { Filter } from "../data/Filter";
-import { SingleDecadeBarsSpec } from "../spec/artists/SingleDecadeBarsSpec";
 import { SingleDecadeDonutSpec } from "../spec/artists/SingleDecadeDonutSpec";
 
 export function ArtistsByDecadeDonutChart(props: {

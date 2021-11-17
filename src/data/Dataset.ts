@@ -96,7 +96,7 @@ export class Dataset {
     const selectedGenres = filter.genreToggles.selection();
     return this.rows
       .filter((r) => r.year() >= filter.yearStart)
-      .filter((r) => r.year() <= filter.yearEnd)
+      .filter((r) => r.year() < filter.yearEnd)
       .filter(
         (row) =>
           isEmpty(selectedGenres) ||

@@ -19,9 +19,5 @@ export function ArtistsByDecadeBarChart(props: {
     .sort((a, b) => b.count - a.count)
     .slice(0, props.topN);
 
-  return (
-    <Grid item md={6} width="100%" justifyContent="center">
-      <VegaLite spec={SingleDecadeBarsSpec({ ...props, data })} />
-    </Grid>
-  );
+  return <VegaLite spec={SingleDecadeBarsSpec({ ...props, data })} />;
 }

@@ -1,7 +1,7 @@
 import { Toggles } from "../components/Toggles";
 
 const minYear = 1950;
-const maxYear = 2019;
+const maxYear = 2020;
 
 export interface FilterProps {
   genreToggles: Toggles;

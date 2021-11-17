@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { ArtistsVisRow, Dataset } from "../data/Dataset";
 import { Filter } from "../data/Filter";
@@ -10,14 +10,12 @@ export function ArtistsSummaryChart(props: {
   title: string;
   dataset: Dataset;
   filter: Filter;
-  yearStart?: number;
-  yearEnd?: number;
   height: number;
   width: number;
   margin: { left: number; right: number; top: number; bottom: number };
 }) {
-  const [selectedDecade, setSelectedDecade] = useState<number | undefined>(
-    undefined
+  const [selectedDecade, setSelectedDecade] = useState<number>(
+    props.filter.yearEnd - 10
   );
   const [hoverDecade, setHoverDecade] = useState<number | undefined>(undefined);
   const onBarClick = (d: ArtistsVisRow) => setSelectedDecade(d.decade);
@@ -57,10 +55,10 @@ export function ArtistsSummaryChart(props: {
       </Grid>
       <Grid item md={6}>
         <SummaryBarChart
+          {...props}
           rollupData={summaryRollup}
-          height={props.height}
           width={props.width / 2}
-          margin={props.margin}
+          height={props.height / 2}
           onBarClick={onBarClick}
           onBarMouseover={onBarMouseover}
           onBarMouseout={onBarMouseout}
@@ -71,9 +69,10 @@ export function ArtistsSummaryChart(props: {
           topN={10}
           decade={selectedDecade ?? 2010}
           width={props.width / 2}
+          height={props.height / 2}
         />
       </Grid>
-      <Grid item md={6}>
+      <Grid item md={6} alignContent={"center"}>
         <ArtistsByDecadeBarChart
           {...props}
           topN={10}
