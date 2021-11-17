@@ -1,23 +1,31 @@
-import { Container, Grid, List, ListItem, Stack, Switch } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Container,
+  Grid,
+  List,
+  ListItem,
+  Stack,
+  Switch,
+} from "@mui/material";
 import React, { Suspense, useState } from "react";
 import { ArtistsByDecadeChart } from "./components/ArtistsByDecadeChart";
 import { ArtistsSummaryChart } from "./components/ArtistsSummaryChart";
 import { FeaturesAreaChart } from "./components/FeaturesAreaChart";
 import { FeaturesDonutChart } from "./components/FeaturesDonutChart";
 import { FeaturesRadarChart } from "./components/FeaturesRadarChart";
-import { SelectFeature } from "./components/SelectFeature";
+import { SelectFeature, useFeatureToggles } from "./components/SelectFeature";
 import { SelectGenre } from "./components/SelectGenre";
 import { Toggles } from "./components/Toggles";
-import { useCsvData } from "./data/CsvRow";
-import { Dataset } from "./data/Dataset";
+import { useData } from "./data/Dataset";
 import { Filter } from "./data/Filter";
 
 const loadingMessage = <p>Loading...</p>;
 
 function App() {
-  const dataBytes = useCsvData();
   const [genreToggles, setGenreToggles] = useState(new Toggles());
-  const [featureToggles, setFeatureToggles] = useState(new Toggles());
+  const [featureToggles, setFeatureToggles] = useFeatureToggles();
   const [yearStart] = useState<number | undefined>(undefined);
   const [yearEnd] = useState<number | undefined>(undefined);
 
@@ -28,8 +36,8 @@ function App() {
   const [showTopArtistsByDecadeBar, setShowTopArtistsByDecadeBars] =
     useState(false);
 
-  if (!dataBytes) return loadingMessage;
-  const dataset = Dataset.fromBlob(dataBytes);
+  const dataset = useData();
+  if (!dataset) return loadingMessage;
 
   const filter = new Filter({
     yearStart,
@@ -40,27 +48,34 @@ function App() {
 
   return (
     <Suspense fallback={loadingMessage}>
-      <Container>
-        <Grid container>
-          <Grid item xs={12} style={{ textAlign: "center" }}>
-            <h1>Visualizing Audio Features over the Decades</h1>
-            <em>Created by Jackson Argo, Matt Kinley, and Erick Martinez.</em>
-          </Grid>
-          <Grid item xs={12}>
-            <SelectFeature
-              hidden={true}
-              toggles={featureToggles}
-              setToggles={setFeatureToggles}
-            />
-          </Grid>
+      <Container maxWidth={"xl"}>
+        <Grid container columnSpacing={2}>
           <Grid item xs={2}>
-            <SelectGenre
-              toggles={genreToggles}
-              setToggles={setGenreToggles}
-              options={dataset.genres.reverse()}
-            />
+            <Grid
+              container
+              style={{
+                overflow: "auto",
+                width: 200,
+                height: "100vh",
+                position: "fixed",
+              }}
+            >
+              <SelectFeature
+                toggles={featureToggles}
+                setToggles={setFeatureToggles}
+              />
+              <SelectGenre
+                toggles={genreToggles}
+                setToggles={setGenreToggles}
+                options={dataset.genres.reverse()}
+              />
+            </Grid>
           </Grid>
           <Grid item xs={10}>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              <h1>Visualizing Audio Features over the Decades</h1>
+              <em>Created by Jackson Argo, Matt Kinley, and Erick Martinez.</em>
+            </Grid>
             <FeaturesDonutChart
               hidden={true}
               dataset={dataset}

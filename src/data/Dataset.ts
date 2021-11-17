@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { intersection, isEmpty, uniq } from "lodash/fp";
-import { CsvRow } from "./CsvRow";
+import { useState } from "react";
+import { CsvRow, useCsvData } from "./CsvRow";
 import { Filter } from "./Filter";
 
 export const AudioFeatures = [
@@ -29,15 +30,29 @@ export interface FeaturesRow {
   genres: string[];
 }
 
+export function useData(): Dataset | undefined {
+  const dataBytes = useCsvData();
+  const [dataset, setDataset] = useState<Dataset | undefined>(undefined);
+  if (dataBytes && dataset?.dataBlob !== dataBytes)
+    setDataset(new Dataset(dataBytes));
+  return dataset;
+}
+
 export class Dataset {
+  readonly dataBlob: string;
   readonly rows: CsvRow[];
   readonly genres: string[];
   readonly genreCounts: Map<string, number>;
 
-  constructor(data: CsvRow[]) {
-    this.rows = data;
+  private filterCache = new Map<string, CsvRow[]>();
 
-    const genres = data.flatMap((r) => r.genres());
+  constructor(dataBlob: string) {
+    const rows = d3.csvParse(dataBlob).map((rawRow) => new CsvRow(rawRow));
+    const genres = rows.flatMap((r) => r.genres());
+
+    this.dataBlob = dataBlob;
+    this.rows = rows;
+
     this.genreCounts = genres.reduce(
       (counter, genre) => counter.set(genre, 1 + (counter.get(genre) ?? 0)),
       new Map<string, number>()
@@ -49,10 +64,6 @@ export class Dataset {
       if (aCount === bCount) return aName.localeCompare(bName);
       return aCount - bCount;
     });
-  }
-
-  static fromBlob(blob: string): Dataset {
-    return new Dataset(d3.csvParse(blob).map((rawRow) => new CsvRow(rawRow)));
   }
 
   selectCSVRows(filter: Filter): CsvRow[] {
@@ -70,7 +81,6 @@ export class Dataset {
   unpivotFeatures(filter: Filter): FeaturesRow[] {
     const selectedFeatures = filter.featureToggles.selection();
     if (isEmpty(selectedFeatures)) selectedFeatures.push(...AudioFeatures);
-
     return this.selectCSVRows(filter).flatMap((r) => {
       return selectedFeatures.map<FeaturesRow>((feature_name) => ({
         year: r.year(),

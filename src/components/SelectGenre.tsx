@@ -1,5 +1,13 @@
-import { FormControlLabel, FormGroup, Grid, TextField } from "@mui/material";
-import { uniq } from "lodash/fp";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Stack,
+  Switch,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import { Toggles, ToggleSwitch } from "./Toggles";
 
@@ -10,33 +18,49 @@ export function SelectGenre(props: {
 }) {
   const [search, setSearch] = useState("");
 
-  const filtered = props.options
-    .filter((name) => name && name.toLowerCase().includes(search))
+  const matches = props.options
+    .filter((name) => name.toLowerCase().includes(search))
     .slice(0, 10);
 
-  const options = uniq([...filtered, ...props.toggles.selection()]);
+  const selectedToggles = props.toggles
+    .selection()
+    .map((name) => (
+      <FormControlLabel
+        key={name}
+        control={ToggleSwitch({ ...props, name })}
+        label={name}
+      />
+    ));
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
+    <Stack>
+      <h3>Selected Genres</h3>
+      {props.toggles.selection().length === 0 ? (
+        <em>all genres</em>
+      ) : (
+        selectedToggles
+      )}
+      <FormGroup>
         <TextField
           label="search genres"
           variant="standard"
           onChange={(e) => setSearch(e.target.value)}
         />
-      </Grid>
-      <Grid item xs={12}>
-        <h4>Top matches</h4>
+      </FormGroup>
+      <h4>
+        Matches ({matches.length}/{props.options.length})
+      </h4>
+      <Box>
         <FormGroup>
-          {options.map((name) => (
+          {matches.map((name) => (
             <FormControlLabel
               key={name}
-              control={ToggleSwitch({ ...props, name })}
               label={name}
+              control={ToggleSwitch({ ...props, name })}
             />
           ))}
         </FormGroup>
-      </Grid>
-    </Grid>
+      </Box>
+    </Stack>
   );
 }

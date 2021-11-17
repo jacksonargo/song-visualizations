@@ -12,6 +12,8 @@ export function FeaturesDonutChart(props: {
   height: number;
   width: number;
 }) {
+  if (props.hidden) return <div />;
+
   const featureData = props.dataset.unpivotFeatures(props.filter);
   const reduceGroup = (grouping: FeaturesRow[]) =>
     grouping.map((r) => r.value).reduce((a, b) => a + b) / grouping.length;
@@ -22,7 +24,6 @@ export function FeaturesDonutChart(props: {
       value: reduceGroup(grouping),
     }));
 
-  if (props.hidden) return <div />;
   return (
     <Box>
       <VegaLite spec={DonutChartSpec({ ...props, data })} />

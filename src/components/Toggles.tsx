@@ -1,4 +1,4 @@
-import { Switch } from "@mui/material";
+import { Checkbox, Switch } from "@mui/material";
 import React from "react";
 
 export class Toggles extends Map<string, boolean> {
@@ -17,8 +17,8 @@ export function ToggleSwitch(props: {
   setToggles: (val: Toggles) => void;
 }) {
   return (
-    <Switch
-      value={props.toggles.get(props.name)}
+    <Checkbox
+      checked={props.toggles.get(props.name) ?? false}
       onChange={(e) => {
         const newToggles = new Toggles(props.toggles);
         newToggles.set(props.name, e.target.checked);
