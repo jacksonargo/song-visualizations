@@ -1,14 +1,4 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Container,
-  Grid,
-  List,
-  ListItem,
-  Stack,
-  Switch,
-} from "@mui/material";
+import { Container, Grid, List, ListItem, Stack, Switch } from "@mui/material";
 import React, { Suspense, useState } from "react";
 import { ArtistsByDecadeChart } from "./components/ArtistsByDecadeChart";
 import { ArtistsSummaryChart } from "./components/ArtistsSummaryChart";
@@ -38,7 +28,6 @@ function App() {
 
   const dataset = useData();
   if (!dataset) return loadingMessage;
-
   const filter = new Filter({
     yearStart,
     yearEnd,
@@ -74,7 +63,9 @@ function App() {
           <Grid item xs={10}>
             <Grid item xs={12} style={{ textAlign: "center" }}>
               <h1>Visualizing Audio Features over the Decades</h1>
-              <em>Created by Jackson Argo, Matt Kinley, and Erick Martinez.</em>
+              <em>
+                Created by Jackson Argo, Matt Kinkley, and Erick Martinez.
+              </em>
             </Grid>
             <FeaturesDonutChart
               hidden={true}
@@ -83,7 +74,6 @@ function App() {
               height={300}
               width={800}
             />
-
             <h2>Variation in Features</h2>
             <Switch
               checked={showVariationAreaVis}

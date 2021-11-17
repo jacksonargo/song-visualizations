@@ -1,12 +1,12 @@
-import { Button, FormControlLabel, Stack, Tooltip } from "@mui/material";
+import { FormControlLabel, Stack, Tooltip } from "@mui/material";
+import { isEmpty } from "lodash/fp";
 import { useState } from "react";
 import {
+  AudioFeature,
   AudioFeatureDefinitions,
   AudioFeatures,
-  AudioFeature,
 } from "../data/Dataset";
 import { Toggles, ToggleSwitch } from "./Toggles";
-import { isEmpty } from "lodash/fp";
 
 export function useFeatureToggles(): [Toggles, (val: Toggles) => void] {
   const [toggles, setToggles] = useState(new Toggles());

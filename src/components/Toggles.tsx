@@ -1,4 +1,4 @@
-import { Checkbox, Switch } from "@mui/material";
+import { Checkbox } from "@mui/material";
 import React from "react";
 
 export class Toggles extends Map<string, boolean> {
