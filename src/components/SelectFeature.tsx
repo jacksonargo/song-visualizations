@@ -1,6 +1,10 @@
-import { FormControlLabel, Stack } from "@mui/material";
+import { Button, FormControlLabel, Stack, Tooltip } from "@mui/material";
 import { useState } from "react";
-import { AudioFeatures } from "../data/Dataset";
+import {
+  AudioFeatureDefinitions,
+  AudioFeatures,
+  AudioFeature,
+} from "../data/Dataset";
 import { Toggles, ToggleSwitch } from "./Toggles";
 import { isEmpty } from "lodash/fp";
 
@@ -18,14 +22,20 @@ export function SelectFeature(props: {
   toggles: Toggles;
   setToggles: (val: Toggles) => void;
 }) {
+  const label = (name: AudioFeature) => (
+    <Tooltip title={AudioFeatureDefinitions[name]} placement="right">
+      <span>{name}</span>
+    </Tooltip>
+  );
+
   return (
     <Stack>
       <h3>Selected Features</h3>
-      {AudioFeatures.map((name) => (
+      {AudioFeatures.map((name: AudioFeature) => (
         <FormControlLabel
           key={name}
           control={ToggleSwitch({ ...props, name })}
-          label={name}
+          label={label(name)}
         />
       ))}
     </Stack>
