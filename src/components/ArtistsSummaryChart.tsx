@@ -1,51 +1,106 @@
-import { Box } from "@mui/material";
-import React, { useEffect, useRef } from "react";
+import { Box, Grid } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 import { ArtistsVisRow, Dataset } from "../data/Dataset";
 import { Filter } from "../data/Filter";
 import { SummaryBarChartSpec } from "../spec/artists/SummaryBarChartSpec";
+import { ArtistsByDecadeBarChart } from "./ArtistsByDecadeBarChart";
+import { ArtistsByDecadeDonutChart } from "./ArtistsByDecadeDonutChart";
 
 export function ArtistsSummaryChart(props: {
+  title: string;
   dataset: Dataset;
   filter: Filter;
-  show: boolean;
   yearStart?: number;
   yearEnd?: number;
   height: number;
   width: number;
   margin: { left: number; right: number; top: number; bottom: number };
 }) {
-  if (!props.show) return <Box />;
+  const [selectedDecade, setSelectedDecade] = useState<number | undefined>(
+    undefined
+  );
+  const [hoverDecade, setHoverDecade] = useState<number | undefined>(undefined);
+  const onBarClick = (d: ArtistsVisRow) => setSelectedDecade(d.decade);
+  const onBarMouseover = (d: ArtistsVisRow) => setHoverDecade(d.decade);
+  const onBarMouseout = (d: ArtistsVisRow) => {
+    if (d.decade === hoverDecade) setHoverDecade(undefined);
+  };
 
-  const rollup = props.dataset
+  const fill = Object.freeze({
+    selected: "#314e8c",
+    hover: "#17198d",
+    normal: "#adc2eb",
+  });
+  const barFill = (d: ArtistsVisRow): string => {
+    switch (d.decade) {
+      case selectedDecade:
+        return fill.selected;
+      case hoverDecade:
+        return fill.hover;
+      default:
+        return fill.normal;
+    }
+  };
+
+  const summaryRollup = props.dataset
     .toArtistsVisRow(props.filter)
-    .filter((r) => r.distinctArtists > 1);
-
-  rollup.sort((a, b) => a.decade - b.decade);
+    .filter((r) => r.distinctArtists > 1)
+    .sort((a, b) => a.decade - b.decade);
 
   return (
-    <Box>
-      <BarChart
-        rollupData={rollup}
-        height={props.height}
-        width={props.width}
-        margin={props.margin}
-      />
-    </Box>
+    <Grid container>
+      <Grid item xs={12}>
+        <h2>{props.title}</h2>
+        <h3>
+          {selectedDecade ?? 2010} - {selectedDecade ?? 2020}
+        </h3>
+      </Grid>
+      <Grid item md={6}>
+        <SummaryBarChart
+          rollupData={summaryRollup}
+          height={props.height}
+          width={props.width / 2}
+          margin={props.margin}
+          onBarClick={onBarClick}
+          onBarMouseover={onBarMouseover}
+          onBarMouseout={onBarMouseout}
+          barFill={barFill}
+        />
+        <ArtistsByDecadeDonutChart
+          {...props}
+          topN={10}
+          decade={selectedDecade ?? 2010}
+          width={props.width / 2}
+        />
+      </Grid>
+      <Grid item md={6}>
+        <ArtistsByDecadeBarChart
+          {...props}
+          topN={10}
+          width={props.width / 2}
+          decade={selectedDecade ?? 2010}
+        />
+      </Grid>
+    </Grid>
   );
 }
 
-function BarChart(props: {
+function SummaryBarChart(props: {
   rollupData: ArtistsVisRow[];
   height: number;
   width: number;
   margin: { left: number; right: number; top: number; bottom: number };
+  onBarClick: (e: ArtistsVisRow) => void;
+  onBarMouseover: (d: ArtistsVisRow) => void;
+  onBarMouseout: (d: ArtistsVisRow) => void;
+  barFill: (d: ArtistsVisRow) => string;
 }) {
-  const visRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const svg = SummaryBarChartSpec({ ref: visRef, ...props });
+    const svg = SummaryBarChartSpec({ ref, ...props });
     return () => {
       svg.remove();
     };
   });
-  return <div ref={visRef} />;
+  return <div ref={ref} />;
 }

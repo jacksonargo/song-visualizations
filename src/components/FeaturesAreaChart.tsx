@@ -9,11 +9,9 @@ export interface FeaturesAreaChartProps {
   height: number;
   width: number;
   dataset: Dataset;
-  show: boolean;
 }
 
 export function FeaturesAreaChart(props: FeaturesAreaChartProps) {
-  if (!props.show) return <Box />;
   return (
     <Box>
       <VegaLite

@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import * as d3 from "d3";
 import { VegaLite } from "react-vega";
 import { Dataset, FeaturesRow } from "../data/Dataset";
@@ -23,10 +22,5 @@ export function FeaturesDonutChart(props: {
       featureName: featureName,
       value: reduceGroup(grouping),
     }));
-
-  return (
-    <Box>
-      <VegaLite spec={DonutChartSpec({ ...props, data })} />
-    </Box>
-  );
+  return <VegaLite spec={DonutChartSpec({ ...props, data })} />;
 }

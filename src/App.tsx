@@ -1,10 +1,15 @@
-import { Container, Grid, List, ListItem, Stack, Switch } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  List,
+  ListItem,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { Suspense, useState } from "react";
-import { ArtistsByDecadeChart } from "./components/ArtistsByDecadeChart";
 import { ArtistsSummaryChart } from "./components/ArtistsSummaryChart";
 import { FeaturesAreaChart } from "./components/FeaturesAreaChart";
-import { FeaturesDonutChart } from "./components/FeaturesDonutChart";
-import { FeaturesRadarChart } from "./components/FeaturesRadarChart";
 import { SelectFeature, useFeatureToggles } from "./components/SelectFeature";
 import { SelectGenre } from "./components/SelectGenre";
 import { Toggles } from "./components/Toggles";
@@ -19,13 +24,6 @@ function App() {
   const [yearStart] = useState<number | undefined>(undefined);
   const [yearEnd] = useState<number | undefined>(undefined);
 
-  const [showVariationAreaVis, setShowVariationAreaVis] = useState(true);
-  const [showVariationsRadarVis, setShowVariationsRadarVis] = useState(false);
-  const [showTopArtistsOverallBar, setShowTopArtistsOverallBar] =
-    useState(false);
-  const [showTopArtistsByDecadeBar, setShowTopArtistsByDecadeBars] =
-    useState(false);
-
   const dataset = useData();
   if (!dataset) return loadingMessage;
   const filter = new Filter({
@@ -38,7 +36,7 @@ function App() {
   return (
     <Suspense fallback={loadingMessage}>
       <Container maxWidth={"xl"}>
-        <Grid container columnSpacing={2}>
+        <Grid container>
           <Grid item xs={2}>
             <Grid
               container
@@ -60,79 +58,31 @@ function App() {
               />
             </Grid>
           </Grid>
-          <Grid item xs={10}>
-            <Grid item xs={12} style={{ textAlign: "center" }}>
+          <Grid item xs={10} width={"100%"} justifyContent={"center"}>
+            <Typography textAlign={"center"}>
               <h1>Visualizing Audio Features over the Decades</h1>
               <em>
                 Created by Jackson Argo, Matt Kinkley, and Erick Martinez.
               </em>
-            </Grid>
-            <FeaturesDonutChart
-              hidden={true}
-              dataset={dataset}
-              filter={filter}
-              height={300}
-              width={800}
-            />
+            </Typography>
+
             <h2>Variation in Features</h2>
-            <Switch
-              checked={showVariationAreaVis}
-              onChange={(e) => {
-                setShowVariationAreaVis(e.target.checked);
-              }}
-            />
             <FeaturesAreaChart
-              show={showVariationAreaVis}
               dataset={dataset}
               filter={filter}
               height={300}
               width={800}
             />
-            <h2>Variation in Features Radar</h2>
-            <Switch
-              checked={showVariationsRadarVis}
-              onChange={(e) => {
-                setShowVariationsRadarVis(e.target.checked);
-              }}
-            />
-            <FeaturesRadarChart
-              show={showVariationsRadarVis}
-              dataset={dataset}
-              filter={filter}
-              height={400}
-              width={400}
-              padding={40}
-            />
-            <h2>Count of Top Artists</h2>
-            <Switch
-              checked={showTopArtistsOverallBar}
-              onChange={(e) => {
-                setShowTopArtistsOverallBar(e.target.checked);
-              }}
-            />
-            <ArtistsSummaryChart
-              show={showTopArtistsOverallBar}
-              dataset={dataset}
-              filter={filter}
-              height={300}
-              width={800}
-              margin={{ left: 50, top: 50, right: 20, bottom: 20 }}
-            />
-            <h2>Top Artists by Decade</h2>
-            <Switch
-              checked={showTopArtistsByDecadeBar}
-              onChange={(e) => {
-                setShowTopArtistsByDecadeBars(e.target.checked);
-              }}
-            />
-            <ArtistsByDecadeChart
-              show={showTopArtistsByDecadeBar}
-              dataset={dataset}
-              filter={filter}
-              topN={10}
-              height={300}
-              width={800}
-            />
+            <Box height={"100vh"}>
+              <ArtistsSummaryChart
+                title={"Count of Top Artists"}
+                dataset={dataset}
+                filter={filter}
+                height={200}
+                width={800}
+                margin={{ left: 20, top: 20, right: 20, bottom: 20 }}
+              />
+            </Box>
           </Grid>
           <Grid item xs={12}>
             <Grid container justifyContent={"center"}>
