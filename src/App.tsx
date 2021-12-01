@@ -1,10 +1,9 @@
 import {
   Box,
-  Container,
-  Grid,
+  Divider,
+  Drawer,
   List,
   ListItem,
-  Stack,
   Typography,
 } from "@mui/material";
 import React, { Suspense, useState } from "react";
@@ -33,74 +32,70 @@ function App() {
     genreToggles,
   });
 
+  const drawerWidth = 240;
+  let contentWidth = window.innerWidth - 2 * drawerWidth;
+  if (contentWidth < 600) contentWidth = 600;
   return (
     <Suspense fallback={loadingMessage}>
-      <Container maxWidth={"xl"}>
-        <Grid container>
-          <Grid item xs={2}>
-            <Grid
-              container
-              style={{
-                overflow: "auto",
-                width: 200,
-                height: "100vh",
-                position: "fixed",
-              }}
-            >
-              <SelectFeature
-                toggles={featureToggles}
-                setToggles={setFeatureToggles}
-              />
-              <SelectGenre
-                toggles={genreToggles}
-                setToggles={setGenreToggles}
-                options={dataset.genres.reverse()}
-              />
-            </Grid>
-          </Grid>
-          <Grid item xs={10} width={"100%"} justifyContent={"center"}>
-            <Typography textAlign={"center"}>
-              <h1>Visualizing Audio Features over the Decades</h1>
-              <em>
-                Created by Jackson Argo, Matt Kinkley, and Erick Martinez.
-              </em>
-            </Typography>
-
-            <h2>Variation in Features</h2>
-            <FeaturesAreaChart
-              dataset={dataset}
-              filter={filter}
-              height={300}
-              width={800}
+      <Box sx={{ display: "flex" }}>
+        <Drawer
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          variant="permanent"
+          anchor="left"
+        >
+          <Box paddingX={2}>
+            <SelectFeature
+              toggles={featureToggles}
+              setToggles={setFeatureToggles}
             />
-            <Box height={"100vh"} maxWidth={"100%"}>
-              <ArtistsSummaryChart
-                title={"Count of Top Artists"}
-                dataset={dataset}
-                filter={filter}
-                height={600}
-                width={1200}
-                margin={{ left: 20, top: 20, right: 20, bottom: 20 }}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12}>
-            <Grid container justifyContent={"center"}>
-              <Grid item>
-                <Stack spacing={{ xs: 3 }}>
-                  <List>
-                    <ListItem>
-                      <a href="https://developer.spotify.com/documentation/web-api/reference/#/operations/get-audio-features">
-                        Spotify's Audio Features API Docs
-                      </a>
-                    </ListItem>
-                  </List>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Container>
+            <SelectGenre
+              toggles={genreToggles}
+              setToggles={setGenreToggles}
+              options={dataset.genres.reverse()}
+            />
+            <Divider />
+            <a
+              style={{ paddingBottom: 5 }}
+              href="https://developer.spotify.com/documentation/web-api/reference/#/operations/get-audio-features"
+            >
+              Spotify API Docs
+            </a>
+          </Box>
+        </Drawer>
+        <Box
+          width={contentWidth}
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+        >
+          <Typography textAlign={"center"}>
+            <h1>Visualizing Audio Features over the Decades</h1>
+            <em>Created by Jackson Argo, Matt Kinkley, and Erick Martinez.</em>
+          </Typography>
+
+          <h2>Variation in Features</h2>
+          <FeaturesAreaChart
+            dataset={dataset}
+            filter={filter}
+            height={300}
+            width={contentWidth}
+          />
+          <ArtistsSummaryChart
+            title={"Count of Top Artists"}
+            dataset={dataset}
+            filter={filter}
+            height={400}
+            width={contentWidth}
+            margin={{ left: 20, top: 20, right: 20, bottom: 20 }}
+          />
+        </Box>
+      </Box>
     </Suspense>
   );
 }

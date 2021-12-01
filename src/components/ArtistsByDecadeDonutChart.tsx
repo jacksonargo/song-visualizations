@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { uniq } from "lodash/fp";
+import { uniq, range } from "lodash/fp";
 import { VegaLite } from "react-vega";
 import { ArtistsVisRow, Dataset } from "../data/Dataset";
 import { Filter } from "../data/Filter";
@@ -35,15 +35,14 @@ export function ArtistsByDecadeDonutChart(props: {
   });
 
   const sorted = filtered.sort((a, b) => a.count - b.count).reverse();
-  const summaryTopN = sorted
-    .slice(0, props.topN)
-    .reduce(summarize, initSummary(props.decade, `Top ${props.topN}`));
-
-  const summaryOthers = sorted
-    .slice(props.topN, -1)
-    .reduce(summarize, initSummary(props.decade, "Others"));
-
-  const data = [summaryOthers, summaryTopN];
+  const data = range(1, sorted.length / 5)
+    .map((n) => n * 5)
+    .map((n) => {
+      const name = n > 0 ? `Top ${n}` : `Others`;
+      return sorted
+        .slice(0, n)
+        .reduce(summarize, initSummary(props.decade, name));
+    });
 
   return (
     <Stack justifyContent="center">
