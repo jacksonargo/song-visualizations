@@ -1,20 +1,14 @@
 import * as d3 from "d3";
 
-export function RadarChart(ref, dataSelect_1, dataSelect_2) {
-  // var color = d3.scaleOrdinal().range(["#000080","#CC333F"]);
-  // var color = d3.scaleOrdinal().range(["#000080","#EDC951"]);
-  // var color = d3.scaleOrdinal().range(["#EDC951", "#CC333F"]);
-  // var color = d3.scaleOrdinal().range(["#E74C3C", "#2980B9"]);
-  // var color = d3.scaleOrdinal().range(["#E74C3C", "#138D75"]);
-  // var color = d3.scaleOrdinal().range(["#2980B9", "#138D75"]);
+export function RadarChart(ref, dataSelect_1, dataSelect_2, chartStyle) {
   const color = d3.scaleOrdinal().range(["#7FB3D5", "#F1948A"]);
-
-  //////////////////////////////////////////////////////////////
-  //////////////////////// Set-Up //////////////////////////////
-  //////////////////////////////////////////////////////////////
-
   const margin = { top: 100, right: 100, bottom: 100, left: 100 };
+  const { data, labels } = extractDataAndLabels(dataSelect_1, dataSelect_2);
 
+  return DrawRadarChart(ref, data, labels, chartStyle);
+}
+
+function extractDataAndLabels(dataSelect_1, dataSelect_2) {
   //////////////////////////////////////////////////////////////
   ////////////////////////// Data //////////////////////////////
   //////////////////////////////////////////////////////////////
@@ -215,32 +209,7 @@ export function RadarChart(ref, dataSelect_1, dataSelect_2) {
 
   let data = selection1.concat(selection2);
   let labels = label1.concat(label2);
-
-  console.log("radar chart resolved data", { data, labels });
-
-  //////////////////////////////////////////////////////////////
-  //////////////////// Draw the Chart //////////////////////////
-  //////////////////////////////////////////////////////////////
-
-  //Call function to draw the Radar chart
-  return DrawRadarChart(ref, data, labels, {
-    circleWidth: 600, //Width of the circle
-    circleHeight: 600, //Height of the circle
-    labelFactor: 1.25, //How much farther than the radius of the outer circle should the labels be placed
-    wrapWidth: 60, //The number of pixels after which a label needs to be given a new line
-    opacityArea: 0.35, //The opacity of the area of the blob
-    dotRadius: 4, //The size of the colored circles of each blog
-    opacityCircles: 0.1, //The opacity of the circles of each blob
-    strokeWidth: 2, //The width of the stroke around each blob
-    margin: margin,
-    maxValue: 1,
-    levels: 1,
-    roundStrokes: true,
-    color: color,
-    fontFamily: "sans-serif",
-    textColor: "#000000",
-    backgroundColor: "#FFFFFF",
-  });
+  return { data, labels };
 }
 
 function DrawRadarChart(ref, data, labels, chartStyle) {
@@ -325,6 +294,7 @@ function DrawRadarChart(ref, data, labels, chartStyle) {
 
   const svg = div
     .append("svg")
+    .attr("viewBox", `0 0 ${chartStyle.width} ${chartStyle.height}`)
     .attr("class", +new Date())
     .style("background", chartStyle.backgroundColor)
     .style("font", chartStyle.fontFamily)
