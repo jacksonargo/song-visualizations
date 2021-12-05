@@ -1,4 +1,4 @@
-import { FormControlLabel, Stack, Tooltip } from "@mui/material";
+import { Box, FormControlLabel, Stack, Tooltip } from "@mui/material";
 import { isEmpty } from "lodash/fp";
 import { useState } from "react";
 import {
@@ -7,6 +7,7 @@ import {
   AudioFeatures,
 } from "../data/Dataset";
 import { Toggles, ToggleSwitch } from "./Toggles";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 export function useFeatureToggles(): [Toggles, (val: Toggles) => void] {
   const [toggles, setToggles] = useState(new Toggles());
@@ -24,7 +25,9 @@ export function SelectFeature(props: {
 }) {
   const label = (name: AudioFeature) => (
     <Tooltip title={AudioFeatureDefinitions[name]} placement="right">
-      <span>{name}</span>
+      <span>
+        {name} <HelpOutlineIcon fontSize={"small"} />
+      </span>
     </Tooltip>
   );
 

@@ -7,13 +7,14 @@ import { FeaturesAreaChart } from "./FeaturesAreaChart";
 import { FeaturesRadarChart } from "./FeaturesRadarChart";
 
 export function FeaturesChart(props: {
+  id: string;
   title: string;
   dataset: Dataset;
   filter: Filter;
   width: number;
 }) {
   return (
-    <Box>
+    <Box id={props.id}>
       <h2>{props.title}</h2>
       <FeaturesAreaChart
         dataset={props.dataset}

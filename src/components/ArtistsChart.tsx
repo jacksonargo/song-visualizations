@@ -7,6 +7,7 @@ import { ArtistsByDecadeDonutChart } from "./ArtistsByDecadeDonutChart";
 import { ArtistSummaryBarChart } from "./ArtistSummaryBarChart";
 
 export function ArtistsChart(props: {
+  id: string;
   title: string;
   dataset: Dataset;
   filter: Filter;
@@ -48,7 +49,7 @@ export function ArtistsChart(props: {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <h2>{props.title}</h2>
+        <h2 id={props.id}> {props.title}</h2>
         <h3>
           {selectedDecade ?? 2010} - {selectedDecade ?? 2020}
         </h3>

@@ -70,8 +70,6 @@ export class Dataset {
   readonly genres: string[];
   readonly genreCounts: Map<string, number>;
 
-  private filterCache = new Map<string, CsvRow[]>();
-
   constructor(dataBlob: string) {
     const rows = d3.csvParse(dataBlob).map((rawRow) => new CsvRow(rawRow));
     const genres = rows.flatMap((r) => r.genres());

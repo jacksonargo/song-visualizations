@@ -1,6 +1,14 @@
-import { Box, Divider, Drawer, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import React, { Suspense, useState } from "react";
 import { ArtistsChart } from "./components/ArtistsChart";
+import { DataTable } from "./components/DataTable";
 import { FeaturesChart } from "./components/FeaturesChart";
 import { SelectFeature, useFeatureToggles } from "./components/SelectFeature";
 import { SelectGenre } from "./components/SelectGenre";
@@ -25,18 +33,19 @@ function App() {
     genreToggles,
   });
 
-  const drawerWidth = 240;
-  let contentWidth = window.innerWidth - 2 * drawerWidth;
+  const leftDrawerWidth = 250;
+  const rightDrawerWidth = 200;
+  let contentWidth = window.innerWidth - 2 * leftDrawerWidth - rightDrawerWidth;
   if (contentWidth < 600) contentWidth = 600;
   return (
     <Suspense fallback={loadingMessage}>
       <Box sx={{ display: "flex" }}>
         <Drawer
           sx={{
-            width: drawerWidth,
+            width: leftDrawerWidth,
             flexShrink: 0,
             "& .MuiDrawer-paper": {
-              width: drawerWidth,
+              width: leftDrawerWidth,
               boxSizing: "border-box",
             },
           }}
@@ -62,6 +71,7 @@ function App() {
             </a>
           </Box>
         </Drawer>
+
         <Box
           width={contentWidth}
           component="main"
@@ -75,6 +85,7 @@ function App() {
           </Typography>
 
           <FeaturesChart
+            id={"features-chart"}
             title="Explore Features"
             dataset={dataset}
             filter={filter}
@@ -82,14 +93,45 @@ function App() {
           />
 
           <ArtistsChart
-            title={"Breakdown Artists"}
+            id={"artists-chart"}
+            title={"Artists Breakdown"}
             dataset={dataset}
             filter={filter}
             height={400}
             width={contentWidth}
             margin={{ left: 20, top: 20, right: 20, bottom: 20 }}
           />
+
+          <DataTable id={"data-table"} dataset={dataset} filter={filter} />
         </Box>
+
+        <Drawer
+          sx={{
+            width: rightDrawerWidth,
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: rightDrawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          variant="permanent"
+          anchor="right"
+        >
+          <Box paddingX={2}>
+            <h3>Navigation</h3>
+            <List>
+              <ListItem>
+                <a href="#features-chart">Explore Features</a>
+              </ListItem>
+              <ListItem>
+                <a href="#artists-chart">Artists Breakdown</a>
+              </ListItem>
+              <ListItem>
+                <a href="#data-table">Data Table</a>
+              </ListItem>
+            </List>
+          </Box>
+        </Drawer>
       </Box>
     </Suspense>
   );
