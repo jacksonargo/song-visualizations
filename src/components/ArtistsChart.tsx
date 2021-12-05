@@ -1,12 +1,12 @@
 import { Grid } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { ArtistsVisRow, Dataset } from "../data/Dataset";
 import { Filter } from "../data/Filter";
-import { SummaryBarChartSpec } from "../spec/artists/SummaryBarChartSpec";
 import { ArtistsByDecadeBarChart } from "./ArtistsByDecadeBarChart";
 import { ArtistsByDecadeDonutChart } from "./ArtistsByDecadeDonutChart";
+import { ArtistSummaryBarChart } from "./ArtistSummaryBarChart";
 
-export function ArtistsSummaryChart(props: {
+export function ArtistsChart(props: {
   title: string;
   dataset: Dataset;
   filter: Filter;
@@ -54,7 +54,7 @@ export function ArtistsSummaryChart(props: {
         </h3>
       </Grid>
       <Grid item md={6}>
-        <SummaryBarChart
+        <ArtistSummaryBarChart
           {...props}
           rollupData={summaryRollup}
           width={props.width / 2}
@@ -82,24 +82,4 @@ export function ArtistsSummaryChart(props: {
       </Grid>
     </Grid>
   );
-}
-
-function SummaryBarChart(props: {
-  rollupData: ArtistsVisRow[];
-  height: number;
-  width: number;
-  margin: { left: number; right: number; top: number; bottom: number };
-  onBarClick: (e: ArtistsVisRow) => void;
-  onBarMouseover: (d: ArtistsVisRow) => void;
-  onBarMouseout: (d: ArtistsVisRow) => void;
-  barFill: (d: ArtistsVisRow) => string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const svg = SummaryBarChartSpec({ ref, ...props });
-    return () => {
-      svg.remove();
-    };
-  });
-  return <div ref={ref} />;
 }

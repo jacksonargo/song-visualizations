@@ -1,14 +1,7 @@
-import {
-  Box,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, Drawer, Typography } from "@mui/material";
 import React, { Suspense, useState } from "react";
-import { ArtistsSummaryChart } from "./components/ArtistsSummaryChart";
-import { FeaturesAreaChart } from "./components/FeaturesAreaChart";
+import { ArtistsChart } from "./components/ArtistsChart";
+import { FeaturesChart } from "./components/FeaturesChart";
 import { SelectFeature, useFeatureToggles } from "./components/SelectFeature";
 import { SelectGenre } from "./components/SelectGenre";
 import { Toggles } from "./components/Toggles";
@@ -74,20 +67,22 @@ function App() {
           component="main"
           sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
         >
+          <h1 style={{ textAlign: "center" }}>
+            Visualizing Audio Features over the Decades
+          </h1>
           <Typography textAlign={"center"}>
-            <h1>Visualizing Audio Features over the Decades</h1>
             <em>Created by Jackson Argo, Matt Kinkley, and Erick Martinez.</em>
           </Typography>
 
-          <h2>Variation in Features</h2>
-          <FeaturesAreaChart
+          <FeaturesChart
+            title="Explore Features"
             dataset={dataset}
             filter={filter}
-            height={300}
             width={contentWidth}
           />
-          <ArtistsSummaryChart
-            title={"Count of Top Artists"}
+
+          <ArtistsChart
+            title={"Breakdown Artists"}
             dataset={dataset}
             filter={filter}
             height={400}
