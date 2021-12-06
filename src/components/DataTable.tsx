@@ -1,5 +1,4 @@
 import {
-  Box,
   Stack,
   Table,
   TableBody,
@@ -13,11 +12,7 @@ import { useState } from "react";
 import { AudioFeatures, Dataset } from "../data/Dataset";
 import { Filter } from "../data/Filter";
 
-export function DataTable(props: {
-  dataset: Dataset;
-  filter: Filter;
-  id: string;
-}) {
+export function DataTable(props: { dataset: Dataset; filter: Filter }) {
   const [searchInput, setSearchInput] = useState("");
 
   const data = props.dataset
@@ -26,15 +21,15 @@ export function DataTable(props: {
       (r) => r.name.includes(searchInput) || r.artist.includes(searchInput)
     )
     .sort((a, b) => {
-      if (a.year() != b.year()) return a.year() - b.year();
-      if (a.artist.localeCompare(b.artist) != 0)
+      if (a.year() !== b.year()) return a.year() - b.year();
+      if (a.artist.localeCompare(b.artist) !== 0)
         return a.artist.localeCompare(b.artist);
       return a.name.localeCompare(b.name);
     });
 
   return (
     <Stack style={{ height: "100vh" }} padding={2}>
-      <h2 id={props.id}>Data Table</h2>
+      <h2 id={"DataTable"}>Data Table</h2>
       <p>View the entire dataset with filters from the left column applied.</p>
       <TextField
         size="small"

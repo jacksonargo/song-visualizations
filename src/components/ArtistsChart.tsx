@@ -3,11 +3,9 @@ import React, { useState } from "react";
 import { ArtistsVisRow, Dataset } from "../data/Dataset";
 import { Filter } from "../data/Filter";
 import { ArtistsByDecadeBarChart } from "./ArtistsByDecadeBarChart";
-import { ArtistsByDecadeDonutChart } from "./ArtistsByDecadeDonutChart";
 import { ArtistSummaryBarChart } from "./ArtistSummaryBarChart";
 
 export function ArtistsChart(props: {
-  id: string;
   title: string;
   dataset: Dataset;
   filter: Filter;
@@ -49,12 +47,14 @@ export function ArtistsChart(props: {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <h2 id={props.id}> {props.title}</h2>
+        <h2 id="ArtistsChart">{props.title}</h2>
         <p>
-          The left chart shows the number of distinct artists within the top 100
-          playlist for each decade. Click on the bar in the left chart to select
-          a decade. The right chart shows the top 10 artists with the most
-          tracks in for the selected decade.
+          See which artists produced the most hits for a decade. Use the filters
+          on the left to select different genres. Click on a bar in the left
+          chart to select a decade. The left chart shows the number of distinct
+          artists within the top 100 playlist for each decade. The right chart
+          shows the top 10 artists with the most tracks in for the selected
+          decade.
         </p>
         <h3>
           {selectedDecade ?? 2010} - {selectedDecade ?? 2020}

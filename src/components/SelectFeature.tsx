@@ -1,4 +1,5 @@
-import { Box, FormControlLabel, Stack, Tooltip } from "@mui/material";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { FormControlLabel, Stack, Tooltip } from "@mui/material";
 import { isEmpty } from "lodash/fp";
 import { useState } from "react";
 import {
@@ -7,7 +8,6 @@ import {
   AudioFeatures,
 } from "../data/Dataset";
 import { Toggles, ToggleSwitch } from "./Toggles";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 export function useFeatureToggles(): [Toggles, (val: Toggles) => void] {
   const [toggles, setToggles] = useState(new Toggles());

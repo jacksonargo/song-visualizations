@@ -1,11 +1,4 @@
-import {
-  Box,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { Box, Drawer, List, ListItem, Typography } from "@mui/material";
 import React, { Suspense, useState } from "react";
 import { ArtistsChart } from "./components/ArtistsChart";
 import { DataTable } from "./components/DataTable";
@@ -86,14 +79,10 @@ function App() {
                 Spotify API Docs
               </a>
               .
-              <br />
-              *Use the filters on the left pane to select particular features
-              and genres.
             </p>
           </Typography>
 
           <FeaturesChart
-            id={"features-chart"}
             title="Explore Features"
             dataset={dataset}
             filter={filter}
@@ -101,7 +90,6 @@ function App() {
           />
 
           <ArtistsChart
-            id={"artists-chart"}
             title={"Artists Breakdown"}
             dataset={dataset}
             filter={filter}
@@ -110,7 +98,7 @@ function App() {
             margin={{ left: 20, top: 20, right: 20, bottom: 20 }}
           />
 
-          <DataTable id={"data-table"} dataset={dataset} filter={filter} />
+          <DataTable dataset={dataset} filter={filter} />
         </Box>
 
         <Drawer
@@ -129,13 +117,23 @@ function App() {
             <h3>Navigation</h3>
             <List>
               <ListItem>
-                <a href="#features-chart">Explore Features</a>
+                <a href="#FeaturesChart">Explore Features</a>
               </ListItem>
               <ListItem>
-                <a href="#artists-chart">Artists Breakdown</a>
+                <List disablePadding>
+                  <ListItem>
+                    <a href="#FeaturesAsProportion">As Proportion</a>
+                  </ListItem>
+                  <ListItem>
+                    <a href="#FeaturesByDecade">By Decade</a>
+                  </ListItem>
+                </List>
               </ListItem>
               <ListItem>
-                <a href="#data-table">Data Table</a>
+                <a href="#ArtistsChart">Artists Breakdown</a>
+              </ListItem>
+              <ListItem>
+                <a href="#DataTable">Data Table</a>
               </ListItem>
             </List>
           </Box>

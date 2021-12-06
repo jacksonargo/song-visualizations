@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import * as d3 from "d3";
 import React from "react";
 import { Dataset } from "../data/Dataset";
@@ -7,26 +7,27 @@ import { FeaturesAreaChart } from "./FeaturesAreaChart";
 import { FeaturesRadarChart } from "./FeaturesRadarChart";
 
 export function FeaturesChart(props: {
-  id: string;
   title: string;
   dataset: Dataset;
   filter: Filter;
   width: number;
 }) {
   return (
-    <Box id={props.id}>
-      <h2>{props.title}</h2>
-      <em>
-        Proportion of features among all songs as they have changed over the
-        decades.
-      </em>
+    <Stack spacing={4} mx={"auto"}>
+      <h2 id={"FeaturesChart"}>{props.title}</h2>
+      <p>
+        See how the different features of top hits have changed over the
+        decades. Use the filters on the left to select particular features and
+        genres.
+      </p>
+      <em id={"FeaturesAsProportion"}>Compare features as a proportions.</em>
       <FeaturesAreaChart
         dataset={props.dataset}
         filter={props.filter}
         height={300}
         width={props.width}
       />
-      <em>View the decades individually.</em>
+      <em id={"FeaturesByDecade"}>Compare features by decade.</em>
       <FeaturesRadarChart
         chartStyle={{
           height: 600,
@@ -43,12 +44,22 @@ export function FeaturesChart(props: {
           maxValue: 1,
           levels: 1,
           roundStrokes: true,
-          color: d3.scaleOrdinal().range(["#7FB3D5", "#F1948A"]),
+          color: d3
+            .scaleOrdinal()
+            .range([
+              "#1D9A6C",
+              "#39A96B",
+              "#56B870",
+              "#74C67A",
+              "#99D492",
+              "#BFE1B0",
+              "#DEEDCF",
+            ]),
           fontFamily: "sans-serif",
           textColor: "#000000",
           backgroundColor: "#FFFFFF",
         }}
       />
-    </Box>
+    </Stack>
   );
 }

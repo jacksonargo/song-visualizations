@@ -1,0 +1,51 @@
+export const FeatureRadarRollup = {
+  1950: [
+    { axis: "danceability", value: 3.9211428571 },
+    { axis: "energy", value: 2.4251514286 },
+    { axis: "acousticness", value: 6.0927142857 },
+    { axis: "liveness", value: 1.1880714286 },
+    { axis: "valence", value: 3.8623571429 },
+  ],
+  1960: [
+    { axis: "danceability", value: 5.7096 },
+    { axis: "energy", value: 4.74837 },
+    { axis: "acousticness", value: 5.722479 },
+    { axis: "liveness", value: 2.01897 },
+    { axis: "valence", value: 6.3435 },
+  ],
+  1970: [
+    { axis: "danceability", value: 7.9035 },
+    { axis: "energy", value: 7.3594 },
+    { axis: "acousticness", value: 4.5952008 },
+    { axis: "liveness", value: 2.30935 },
+    { axis: "valence", value: 8.51652 },
+  ],
+  1980: [
+    { axis: "danceability", value: 8.3124 },
+    { axis: "energy", value: 8.48769 },
+    { axis: "acousticness", value: 2.59093 },
+    { axis: "liveness", value: 2.03148 },
+    { axis: "valence", value: 8.9132 },
+  ],
+  1990: [
+    { axis: "danceability", value: 9.9745 },
+    { axis: "energy", value: 10.38224 },
+    { axis: "acousticness", value: 4.59212334 },
+    { axis: "liveness", value: 2.9846 },
+    { axis: "valence", value: 9.87448 },
+  ],
+  2000: [
+    { axis: "danceability", value: 15.0468 },
+    { axis: "energy", value: 16.2707 },
+    { axis: "acousticness", value: 6.28143947 },
+    { axis: "liveness", value: 4.45749 },
+    { axis: "valence", value: 15.14682 },
+  ],
+  2010: [
+    { axis: "danceability", value: 11.26975 },
+    { axis: "energy", value: 11.5775833333 },
+    { axis: "acousticness", value: 4.5000248333 },
+    { axis: "liveness", value: 3.0024333333 },
+    { axis: "valence", value: 9.571625 },
+  ],
+};

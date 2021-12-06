@@ -1,215 +1,12 @@
 import * as d3 from "d3";
+import { FeatureRadarRollup } from "./FeatureRadarRollup";
 
-export function RadarChart(ref, dataSelect_1, dataSelect_2, chartStyle) {
-  const color = d3.scaleOrdinal().range(["#7FB3D5", "#F1948A"]);
-  const margin = { top: 100, right: 100, bottom: 100, left: 100 };
-  const { data, labels } = extractDataAndLabels(dataSelect_1, dataSelect_2);
-
+export function RadarChart(ref, chartStyle, wantDecades) {
+  const wantRollup = {};
+  wantDecades.map((d) => (wantRollup[d] = FeatureRadarRollup[d]));
+  const data = Object.values(wantRollup).map((r) => r);
+  const labels = Object.keys(wantRollup).map((r) => [r.toString()]);
   return DrawRadarChart(ref, data, labels, chartStyle);
-}
-
-function extractDataAndLabels(dataSelect_1, dataSelect_2) {
-  //////////////////////////////////////////////////////////////
-  ////////////////////////// Data //////////////////////////////
-  //////////////////////////////////////////////////////////////
-
-  const plot_order = {
-    "00s": 7,
-    "10s": 6,
-    "90s": 5,
-    "80s": 4,
-    "70s": 3,
-    "60s": 2,
-    "50s": 1,
-  };
-
-  let dataSelect1 = dataSelect_1;
-  let dataSelect2 = dataSelect_2;
-  if (plot_order[dataSelect_2] > plot_order[dataSelect_1]) {
-    dataSelect1 = dataSelect_2;
-    dataSelect2 = dataSelect_1;
-  }
-
-  let selection1 = [];
-  let selection2 = [];
-  let label1 = [];
-  let label2 = [];
-
-  if (dataSelect1 === "50s") {
-    selection1 = [
-      [
-        // 50's
-        { axis: "danceability", value: 3.9211428571 },
-        { axis: "energy", value: 2.4251514286 },
-        { axis: "acousticness", value: 6.0927142857 },
-        { axis: "liveness", value: 1.1880714286 },
-        { axis: "valence", value: 3.8623571429 },
-      ],
-    ];
-    label1 = [["50s"]];
-  } else if (dataSelect1 === "60s") {
-    selection1 = [
-      [
-        // 60's
-        { axis: "danceability", value: 5.7096 },
-        { axis: "energy", value: 4.74837 },
-        { axis: "acousticness", value: 5.722479 },
-        { axis: "liveness", value: 2.01897 },
-        { axis: "valence", value: 6.3435 },
-      ],
-    ];
-    label1 = [["60s"]];
-  } else if (dataSelect1 === "70s") {
-    selection1 = [
-      [
-        // 70's
-        { axis: "danceability", value: 7.9035 },
-        { axis: "energy", value: 7.3594 },
-        { axis: "acousticness", value: 4.5952008 },
-        { axis: "liveness", value: 2.30935 },
-        { axis: "valence", value: 8.51652 },
-      ],
-    ];
-    label1 = [["70s"]];
-  } else if (dataSelect1 === "80s") {
-    selection1 = [
-      [
-        // 80's
-        { axis: "danceability", value: 8.3124 },
-        { axis: "energy", value: 8.48769 },
-        { axis: "acousticness", value: 2.59093 },
-        { axis: "liveness", value: 2.03148 },
-        { axis: "valence", value: 8.9132 },
-      ],
-    ];
-    label1 = [["80s"]];
-  } else if (dataSelect1 === "90s") {
-    selection1 = [
-      [
-        // 90's
-        { axis: "danceability", value: 9.9745 },
-        { axis: "energy", value: 10.38224 },
-        { axis: "acousticness", value: 4.59212334 },
-        { axis: "liveness", value: 2.9846 },
-        { axis: "valence", value: 9.87448 },
-      ],
-    ];
-    label1 = [["90s"]];
-  } else if (dataSelect1 === "00s") {
-    selection1 = [
-      [
-        // 00's
-        { axis: "danceability", value: 15.0468 },
-        { axis: "energy", value: 16.2707 },
-        { axis: "acousticness", value: 6.28143947 },
-        { axis: "liveness", value: 4.45749 },
-        { axis: "valence", value: 15.14682 },
-      ],
-    ];
-    label1 = [["00s"]];
-  } else if (dataSelect1 === "10s") {
-    selection1 = [
-      [
-        // 10's
-        { axis: "danceability", value: 11.26975 },
-        { axis: "energy", value: 11.5775833333 },
-        { axis: "acousticness", value: 4.5000248333 },
-        { axis: "liveness", value: 3.0024333333 },
-        { axis: "valence", value: 9.571625 },
-      ],
-    ];
-    label1 = [["10s"]];
-  }
-
-  if (dataSelect2 === "50s") {
-    selection2 = [
-      [
-        // 50's
-        { axis: "danceability", value: 3.9211428571 },
-        { axis: "energy", value: 2.4251514286 },
-        { axis: "acousticness", value: 6.0927142857 },
-        { axis: "liveness", value: 1.1880714286 },
-        { axis: "valence", value: 3.8623571429 },
-      ],
-    ];
-    label2 = [["50s"]];
-  } else if (dataSelect2 === "60s") {
-    selection2 = [
-      [
-        // 60's
-        { axis: "danceability", value: 5.7096 },
-        { axis: "energy", value: 4.74837 },
-        { axis: "acousticness", value: 5.722479 },
-        { axis: "liveness", value: 2.01897 },
-        { axis: "valence", value: 6.3435 },
-      ],
-    ];
-    label2 = [["60s"]];
-  } else if (dataSelect2 === "70s") {
-    selection2 = [
-      [
-        // 70's
-        { axis: "danceability", value: 7.9035 },
-        { axis: "energy", value: 7.3594 },
-        { axis: "acousticness", value: 4.5952008 },
-        { axis: "liveness", value: 2.30935 },
-        { axis: "valence", value: 8.51652 },
-      ],
-    ];
-    label2 = [["70s"]];
-  } else if (dataSelect2 === "80s") {
-    selection2 = [
-      [
-        // 80's
-        { axis: "danceability", value: 8.3124 },
-        { axis: "energy", value: 8.48769 },
-        { axis: "acousticness", value: 2.59093 },
-        { axis: "liveness", value: 2.03148 },
-        { axis: "valence", value: 8.9132 },
-      ],
-    ];
-    label2 = [["80s"]];
-  } else if (dataSelect2 === "90s") {
-    selection2 = [
-      [
-        // 90's
-        { axis: "danceability", value: 9.9745 },
-        { axis: "energy", value: 10.38224 },
-        { axis: "acousticness", value: 4.59212334 },
-        { axis: "liveness", value: 2.9846 },
-        { axis: "valence", value: 9.87448 },
-      ],
-    ];
-    label2 = [["90s"]];
-  } else if (dataSelect2 === "00s") {
-    selection2 = [
-      [
-        // 00's
-        { axis: "danceability", value: 15.0468 },
-        { axis: "energy", value: 16.2707 },
-        { axis: "acousticness", value: 6.28143947 },
-        { axis: "liveness", value: 4.45749 },
-        { axis: "valence", value: 15.14682 },
-      ],
-    ];
-    label2 = [["00s"]];
-  } else if (dataSelect2 === "10s") {
-    selection2 = [
-      [
-        // 10's
-        { axis: "danceability", value: 11.26975 },
-        { axis: "energy", value: 11.5775833333 },
-        { axis: "acousticness", value: 4.5000248333 },
-        { axis: "liveness", value: 3.0024333333 },
-        { axis: "valence", value: 9.571625 },
-      ],
-    ];
-    label2 = [["10s"]];
-  }
-
-  let data = selection1.concat(selection2);
-  let labels = label1.concat(label2);
-  return { data, labels };
 }
 
 function DrawRadarChart(ref, data, labels, chartStyle) {
@@ -273,7 +70,7 @@ function DrawRadarChart(ref, data, labels, chartStyle) {
     }), //Names of each axis
     total = allAxis.length, //The number of different axes
     radius = Math.min(chartStyle.circleWidth / 2, chartStyle.circleHeight / 2), //Radius of the outermost circle
-    Format = d3.format("3"), //Percentage formatting
+    Format = d3.format(".3"), //Percentage formatting
     angleSlice = (Math.PI * 2) / total; //The width in radians of each "slice"
 
   //Scale for the radius
@@ -312,9 +109,6 @@ function DrawRadarChart(ref, data, labels, chartStyle) {
         ")"
     );
 
-  //Set up the small tooltip for when you hover over a circle
-  const tooltip = g.append("text").attr("class", "tooltip").style("opacity", 0);
-
   /////////////////////////////////////////////////////////
   ////////// Glow filter for some extra pizzazz ///////////
   /////////////////////////////////////////////////////////
@@ -349,25 +143,6 @@ function DrawRadarChart(ref, data, labels, chartStyle) {
     .style("fill", "#CDCDCD")
     .style("stroke", "#CDCDCD")
     .style("fill-opacity", chartStyle.opacityCircles);
-  // .style("filter", "url(#glow)");
-
-  //Text indicating at what % each level is
-  // axisGrid
-  //   .selectAll(".axisLabel")
-  //   .data(d3.range(1, cfg.levels + 1).reverse())
-  //   .enter()
-  //   .append("text")
-  //   .attr("class", "axisLabel")
-  //   .attr("x", 4)
-  //   .attr("y", function(d) {
-  //     return (-d * radius) / cfg.levels;
-  //   })
-  //   .attr("dy", "0.4em")
-  //   .style("font-size", "10px")
-  //   //.attr("fill", "#737373")
-  //   .text(function(d, i) {
-  //     return Format((maxValue * d) / cfg.levels);
-  //   });
 
   /////////////////////////////////////////////////////////
   //////////////////// Draw the axes //////////////////////
@@ -522,6 +297,9 @@ function DrawRadarChart(ref, data, labels, chartStyle) {
     .append("g")
     .attr("class", "radarCircleWrapper");
 
+  //Set up the small tooltip for when you hover over a circle
+  const tooltip = g.append("text").attr("class", "tooltip").style("opacity", 0);
+
   //Append a set of invisible circles on top for the mouseover pop-up
   blobCircleWrapper
     .selectAll(".radarInvisibleCircle")
@@ -540,7 +318,7 @@ function DrawRadarChart(ref, data, labels, chartStyle) {
     })
     .style("fill", "none")
     .style("pointer-events", "all")
-    .on("mouseover", function (d, i) {
+    .on("mouseover", function (e, d) {
       var newX = parseFloat(d3.select(this).attr("cx")) - 10;
       var newY = parseFloat(d3.select(this).attr("cy")) - 10;
 
