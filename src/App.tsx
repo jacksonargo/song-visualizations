@@ -62,13 +62,6 @@ function App() {
               setToggles={setGenreToggles}
               options={dataset.genres.reverse()}
             />
-            <Divider />
-            <a
-              style={{ paddingBottom: 5 }}
-              href="https://developer.spotify.com/documentation/web-api/reference/#/operations/get-audio-features"
-            >
-              Spotify API Docs
-            </a>
           </Box>
         </Drawer>
 
@@ -82,6 +75,21 @@ function App() {
           </h1>
           <Typography textAlign={"center"}>
             <em>Created by Jackson Argo, Matt Kinkley, and Erick Martinez.</em>
+
+            <p style={{ textAlign: "justify" }}>
+              A tool for <strong>Anyone</strong> who enjoys music to visualize
+              the hidden features within songs, and how they have changed over
+              time. This data is pulled from Spotify's top 100 playlists of each
+              decade. For more information about how these features are defined,
+              see the{" "}
+              <a href="https://developer.spotify.com/documentation/web-api/reference/#/operations/get-audio-features">
+                Spotify API Docs
+              </a>
+              .
+              <br />
+              *Use the filters on the left pane to select particular features
+              and genres.
+            </p>
           </Typography>
 
           <FeaturesChart

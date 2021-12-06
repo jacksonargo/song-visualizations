@@ -16,18 +16,23 @@ export function FeaturesChart(props: {
   return (
     <Box id={props.id}>
       <h2>{props.title}</h2>
+      <em>
+        Proportion of features among all songs as they have changed over the
+        decades.
+      </em>
       <FeaturesAreaChart
         dataset={props.dataset}
         filter={props.filter}
         height={300}
         width={props.width}
       />
+      <em>View the decades individually.</em>
       <FeaturesRadarChart
         chartStyle={{
-          height: 800,
-          width: 800,
-          circleWidth: 600, //Width of the circle
-          circleHeight: 600, //Height of the circle
+          height: 600,
+          width: 600,
+          circleWidth: 400, //Width of the circle
+          circleHeight: 400, //Height of the circle
           labelFactor: 1.25, //How much farther than the radius of the outer circle should the labels be placed
           wrapWidth: 60, //The number of pixels after which a label needs to be given a new line
           opacityArea: 0.35, //The opacity of the area of the blob

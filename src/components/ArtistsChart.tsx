@@ -50,6 +50,12 @@ export function ArtistsChart(props: {
     <Grid container>
       <Grid item xs={12}>
         <h2 id={props.id}> {props.title}</h2>
+        <p>
+          The left chart shows the number of distinct artists within the top 100
+          playlist for each decade. Click on the bar in the left chart to select
+          a decade. The right chart shows the top 10 artists with the most
+          tracks in for the selected decade.
+        </p>
         <h3>
           {selectedDecade ?? 2010} - {selectedDecade ?? 2020}
         </h3>
@@ -59,18 +65,11 @@ export function ArtistsChart(props: {
           {...props}
           rollupData={summaryRollup}
           width={props.width / 2}
-          height={props.height / 2}
+          height={props.height * 0.8}
           onBarClick={onBarClick}
           onBarMouseover={onBarMouseover}
           onBarMouseout={onBarMouseout}
           barFill={barFill}
-        />
-        <ArtistsByDecadeDonutChart
-          {...props}
-          topN={10}
-          decade={selectedDecade ?? 2010}
-          width={props.width / 2}
-          height={props.height / 2}
         />
       </Grid>
       <Grid item md={6} alignContent={"center"}>

@@ -22,7 +22,9 @@ export function DataTable(props: {
 
   const data = props.dataset
     .selectCSVRows(props.filter)
-    .filter((r) => r.name.includes(searchInput))
+    .filter(
+      (r) => r.name.includes(searchInput) || r.artist.includes(searchInput)
+    )
     .sort((a, b) => {
       if (a.year() != b.year()) return a.year() - b.year();
       if (a.artist.localeCompare(b.artist) != 0)
@@ -33,6 +35,7 @@ export function DataTable(props: {
   return (
     <Stack style={{ height: "100vh" }} padding={2}>
       <h2 id={props.id}>Data Table</h2>
+      <p>View the entire dataset with filters from the left column applied.</p>
       <TextField
         size="small"
         label="search songs"
